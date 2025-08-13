@@ -1,0 +1,74 @@
+{
+    "rememberMe": "Beni Hatırla",
+    "username": "Kullanıcı Adı",
+    "password": "Şifre",
+    "login": "Giriş Yap",
+    "error": "Hata",
+    "usernameRequired": "Lütfen Kullanıcı Adınızı Giriniz",
+    "passwordRequired": "Lütfen Parolanızı Giriniz",
+    "logout": "Çıkış Yap",
+    
+    "home": {
+        "title": "Ana Sayfa",
+        "filter": "Filtrele",
+        "library": "Kütüphane",
+        "science": "Bilim",
+        "search": "Ara",
+        "searchHint": "Kitap veya yazar adı girin",
+        "categories": "Kategoriler",
+        "allBooks": "Tüm Kitaplar",
+        "continueReading": "Okumaya Devam Et",
+        "loadingBooks": "Kitaplar yükleniyor...",
+        "noBooksFound": "Kitap bulunamadı",
+        "errorLoadingBooks": "Kitaplar yüklenirken hata oluştu"
+    },
+    
+    "profile": {
+        "title": "Profilim",
+        "agenda": "Gündemim",
+        "goals": "Hedeflerim",
+        "reviews": "Puan & Yorumlarım",
+        "friends": "Arkadaşlarım",
+        "statistics": "İstatistiklerim",
+        "totalReadingTime": "Toplam Okuma Süresi",
+        "booksRead": "Okuduğum Kitaplar",
+        "booksListened": "Dinlediğim Kitaplar",
+        "readingSpeed": "Ortalama Okuma Hızı",
+        "ranking": "Okumanya Sıralamam",
+        "points": "Puanlarım",
+        "lastPage": "Son Okuduğum Sayfa",
+        "readingLevel": "Okuma Seviyesi",
+        "totalPages": "Toplam Sayfa",
+        "loadingProfile": "Profil yükleniyor...",
+        "errorLoadingProfile": "Profil yüklenirken hata oluştu"
+    },
+    
+    "book": {
+        "readPercentage": "Okundu",
+        "page": "Sayfa",
+        "level": "Seviye",
+        "author": "Yazar",
+        "category": "Kategori",
+        "progress": "İlerleme"
+    },
+    
+    "errors": {
+        "networkError": "İnternet bağlantınızı kontrol edin",
+        "serverError": "Sunucu hatası oluştu",
+        "unknownError": "Bilinmeyen bir hata oluştu",
+        "loginFailed": "Giriş işlemi başarısız",
+        "invalidCredentials": "Geçersiz kullanıcı adı veya şifre",
+        "sessionExpired": "Oturum süresi doldu, lütfen tekrar giriş yapın"
+    },
+    
+    "common": {
+        "ok": "Tamam",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "loading": "Yükleniyor...",
+        "retry": "Tekrar Dene",
+        "success": "Başarılı",
+        "failed": "Başarısız",
+        "close": "Kapat"
+    }
+}
