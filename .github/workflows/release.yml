@@ -1,0 +1,287 @@
+name: Release & Store Deployment
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      release_type:
+        description: 'Release type'
+        required: true
+        default: 'beta'
+        type: choice
+        options:
+          - alpha
+          - beta
+          - production
+
+env:
+  FLUTTER_VERSION: '3.24.1'
+
+jobs:
+  # Prepare Release
+  prepare:
+    runs-on: ubuntu-latest
+    name: Prepare Release
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      release_type: ${{ steps.version.outputs.release_type }}
+      
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 🏷️ Extract Version Info
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          echo "release_type=${{ github.event.inputs.release_type }}" >> $GITHUB_OUTPUT
+        else
+          echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          echo "release_type=production" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: 📄 Update Version in pubspec.yaml
+      run: |
+        VERSION="${{ steps.version.outputs.version }}"
+        VERSION_NUMBER="${VERSION#v}"
+        sed -i "s/version: .*/version: ${VERSION_NUMBER}+${GITHUB_RUN_NUMBER}/" pubspec.yaml
+        
+    - name: 📤 Upload Updated pubspec
+      uses: actions/upload-artifact@v4
+      with:
+        name: updated-pubspec
+        path: pubspec.yaml
+
+  # Build Android for Release
+  build-android-release:
+    runs-on: ubuntu-latest
+    name: Build Android Release
+    needs: prepare
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 📥 Download Updated pubspec
+      uses: actions/download-artifact@v4
+      with:
+        name: updated-pubspec
+        
+    - name: ☕ Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        channel: 'stable'
+        cache: true
+        
+    - name: 📦 Install Dependencies
+      run: flutter pub get
+      
+    - name: 🔧 Code Generation
+      run: dart run build_runner build --delete-conflicting-outputs
+      
+    - name: 🔐 Setup Android Signing
+      run: |
+        echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/okumanya-release-key.jks
+        echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/key.properties
+        echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+        echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+        echo "storeFile=okumanya-release-key.jks" >> android/key.properties
+        
+    - name: 🏗️ Build App Bundle (Release)
+      run: flutter build appbundle --release --build-number=${{ github.run_number }}
+      
+    - name: 🏗️ Build APK (Release)
+      run: flutter build apk --release --split-per-abi --build-number=${{ github.run_number }}
+      
+    - name: 📤 Upload Android Release
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-release
+        path: |
+          build/app/outputs/bundle/release/*.aab
+          build/app/outputs/flutter-apk/*.apk
+        retention-days: 90
+
+  # Build iOS for Release
+  build-ios-release:
+    runs-on: macos-latest
+    name: Build iOS Release
+    needs: prepare
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 📥 Download Updated pubspec
+      uses: actions/download-artifact@v4
+      with:
+        name: updated-pubspec
+        
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        channel: 'stable'
+        cache: true
+        
+    - name: 📦 Install Dependencies
+      run: flutter pub get
+      
+    - name: 🔧 Code Generation
+      run: dart run build_runner build --delete-conflicting-outputs
+      
+    - name: 📱 Setup iOS Dependencies
+      run: |
+        cd ios
+        pod install --repo-update
+        cd ..
+        
+    - name: 🔐 Setup iOS Signing
+      run: |
+        # Install certificates and provisioning profiles
+        echo "${{ secrets.IOS_P12_BASE64 }}" | base64 -d > ios_distribution.p12
+        echo "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" | base64 -d > ios_profile.mobileprovision
+        
+        # Create keychain and import certificate
+        security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+        security import ios_distribution.p12 -k build.keychain -P "${{ secrets.IOS_P12_PASSWORD }}" -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+        
+        # Install provisioning profile
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        cp ios_profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+        
+    - name: 🏗️ Build iOS Archive
+      run: |
+        flutter build ios --release --build-number=${{ github.run_number }}
+        cd ios
+        xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Release -destination generic/platform=iOS archive -archivePath Runner.xcarchive
+        xcodebuild -exportArchive -archivePath Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath ../build/ios/iphoneos/
+        
+    - name: 📤 Upload iOS Release
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-release
+        path: |
+          build/ios/iphoneos/*.ipa
+        retention-days: 90
+
+  # Deploy to Google Play Store
+  deploy-android:
+    runs-on: ubuntu-latest
+    name: Deploy Android to Play Store
+    needs: [prepare, build-android-release]
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 📥 Download Android Release
+      uses: actions/download-artifact@v4
+      with:
+        name: android-release
+        path: ./android-release
+        
+    - name: 🏪 Deploy to Google Play Store
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        packageName: com.example.okumanya
+        releaseFiles: android-release/build/app/outputs/bundle/release/*.aab
+        track: ${{ needs.prepare.outputs.release_type == 'production' && 'production' || 'internal' }}
+        status: completed
+        inAppUpdatePriority: 2
+        whatsNewDirectory: metadata/android/en-US/changelogs
+        mappingFile: android-release/build/app/outputs/mapping/release/mapping.txt
+
+  # Deploy to Apple App Store
+  deploy-ios:
+    runs-on: macos-latest
+    name: Deploy iOS to App Store
+    needs: [prepare, build-ios-release]
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 📥 Download iOS Release
+      uses: actions/download-artifact@v4
+      with:
+        name: ios-release
+        path: ./ios-release
+        
+    - name: 🍎 Deploy to App Store Connect
+      run: |
+        xcrun altool --upload-app --type ios \
+          --file ios-release/build/ios/iphoneos/*.ipa \
+          --username "${{ secrets.APPLE_ID_EMAIL }}" \
+          --password "${{ secrets.APPLE_ID_PASSWORD }}"
+
+  # Create GitHub Release
+  create-release:
+    runs-on: ubuntu-latest
+    name: Create GitHub Release
+    needs: [prepare, deploy-android, deploy-ios]
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 📥 Download All Artifacts
+      uses: actions/download-artifact@v4
+      
+    - name: 📝 Generate Release Notes
+      id: release_notes
+      run: |
+        echo "## 🎉 Release ${{ needs.prepare.outputs.version }}" >> release_notes.md
+        echo "" >> release_notes.md
+        echo "### 📱 What's New" >> release_notes.md
+        git log --pretty=format:"- %s" $(git describe --tags --abbrev=0 HEAD~1)..HEAD >> release_notes.md
+        echo "" >> release_notes.md
+        echo "### 🔧 Technical Details" >> release_notes.md
+        echo "- Build Number: ${{ github.run_number }}" >> release_notes.md
+        echo "- Flutter Version: ${{ env.FLUTTER_VERSION }}" >> release_notes.md
+        echo "- Release Type: ${{ needs.prepare.outputs.release_type }}" >> release_notes.md
+        
+    - name: 🚀 Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ needs.prepare.outputs.version }}
+        release_name: Release ${{ needs.prepare.outputs.version }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: ${{ needs.prepare.outputs.release_type != 'production' }}
+
+  # Post-deployment notifications
+  notify:
+    runs-on: ubuntu-latest
+    name: Post-deployment Notifications
+    needs: [prepare, create-release]
+    if: always()
+    
+    steps:
+    - name: 📧 Notify Team
+      run: |
+        if [ "${{ needs.create-release.result }}" == "success" ]; then
+          echo "✅ Release ${{ needs.prepare.outputs.version }} deployed successfully!"
+          # Add Slack/Discord/Email notifications here
+        else
+          echo "❌ Release ${{ needs.prepare.outputs.version }} failed!"
+          # Add failure notifications here
+        fi

@@ -1,0 +1,17 @@
+# Fastlane Appfile for iOS
+# https://docs.fastlane.tools/advanced/#appfile
+
+# Your Apple ID email
+apple_id(ENV["APPLE_ID"] || "your-email@example.com")
+
+# Your app identifier
+app_identifier("com.okumanya.app")
+
+# Your Apple Developer Team ID
+team_id(ENV["APPLE_TEAM_ID"] || "YOUR_TEAM_ID")
+
+# Path to your iTunes Connect Team ID (if different)
+itunes_connect_team_id(ENV["ITUNES_CONNECT_TEAM_ID"] || ENV["APPLE_TEAM_ID"])
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

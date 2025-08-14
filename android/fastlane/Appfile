@@ -1,0 +1,12 @@
+# Fastlane Appfile for Android
+# https://docs.fastlane.tools/advanced/#appfile
+
+# Your package name
+package_name("com.okumanya.app")
+
+# Path to your service account JSON file
+json_key_file(ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"] || "service-account.json")
+
+# Issuer of the service account JSON file
+# This is used for Google Play Console API access
+# You can find this in your service account JSON file

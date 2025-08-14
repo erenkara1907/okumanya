@@ -1,0 +1,359 @@
+name: Code Quality & Security
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run security scan daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  # Code Quality Analysis
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality Analysis
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.1'
+        channel: 'stable'
+        cache: true
+        
+    - name: 📦 Install Dependencies
+      run: flutter pub get
+      
+    - name: 🔧 Code Generation
+      run: dart run build_runner build --delete-conflicting-outputs
+      
+    - name: 🧹 Format Check
+      run: dart format --output=none --set-exit-if-changed .
+      
+    - name: 📊 Dart Analyzer
+      run: flutter analyze --fatal-infos --fatal-warnings
+      
+    - name: 🔍 Custom Lint Rules
+      run: |
+        # Check for TODO/FIXME comments in main branch
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          TODO_COUNT=$(grep -r "TODO\|FIXME" lib/ --include="*.dart" | wc -l)
+          if [ $TODO_COUNT -gt 0 ]; then
+            echo "❌ Found $TODO_COUNT TODO/FIXME comments in main branch"
+            grep -r "TODO\|FIXME" lib/ --include="*.dart"
+            exit 1
+          fi
+        fi
+        
+    - name: 📏 Code Metrics
+      run: |
+        # Install dart_code_metrics
+        dart pub global activate dart_code_metrics
+        dart pub global run dart_code_metrics:metrics analyze lib
+        dart pub global run dart_code_metrics:metrics check-unused-code lib
+        dart pub global run dart_code_metrics:metrics check-unused-files lib
+        
+    - name: 🎯 Complexity Analysis
+      run: |
+        # Check for high complexity functions
+        dart pub global run dart_code_metrics:metrics analyze lib --reporter=github
+
+  # Security Scanning
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Analysis
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 🔒 SAST Scan with CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: dart
+        
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.1'
+        channel: 'stable'
+        cache: true
+        
+    - name: 📦 Install Dependencies
+      run: flutter pub get
+      
+    - name: 🔧 Build for Analysis
+      run: flutter build apk --debug
+      
+    - name: 🔍 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      
+    - name: 🔐 Dependency Vulnerability Scan
+      run: |
+        # Check for known vulnerabilities in dependencies
+        flutter pub deps --json > deps.json
+        
+        # Check for outdated packages
+        flutter pub outdated --json > outdated.json
+        
+        # Custom security checks
+        echo "Checking for sensitive data exposure..."
+        if grep -r "password\|secret\|token\|api_key" lib/ --include="*.dart" | grep -v "// ignore" | grep -v "test"; then
+          echo "⚠️ Potential sensitive data found in code"
+        fi
+        
+    - name: 🛡️ Android Security Scan
+      run: |
+        # Check Android manifest for security issues
+        if [ -f "android/app/src/main/AndroidManifest.xml" ]; then
+          # Check for backup allowance
+          if grep -q "android:allowBackup=\"true\"" android/app/src/main/AndroidManifest.xml; then
+            echo "⚠️ Android backup is enabled - consider security implications"
+          fi
+          
+          # Check for debug mode in production
+          if grep -q "android:debuggable=\"true\"" android/app/src/main/AndroidManifest.xml; then
+            echo "❌ Debug mode enabled in manifest - security risk!"
+            exit 1
+          fi
+          
+          # Check for clear text traffic
+          if grep -q "android:usesCleartextTraffic=\"true\"" android/app/src/main/AndroidManifest.xml; then
+            echo "⚠️ Clear text traffic allowed - consider HTTPS only"
+          fi
+        fi
+        
+    - name: 🍎 iOS Security Scan
+      run: |
+        # Check iOS Info.plist for security issues
+        if [ -f "ios/Runner/Info.plist" ]; then
+          # Check for arbitrary loads
+          if grep -q "NSAllowsArbitraryLoads.*true" ios/Runner/Info.plist; then
+            echo "⚠️ iOS allows arbitrary loads - security risk"
+          fi
+        fi
+
+  # Dependency Analysis
+  dependency-analysis:
+    runs-on: ubuntu-latest
+    name: Dependency Analysis
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.1'
+        channel: 'stable'
+        cache: true
+        
+    - name: 📦 Install Dependencies
+      run: flutter pub get
+      
+    - name: 📊 Dependency Tree Analysis
+      run: |
+        echo "## Dependency Analysis Report" > dependency-report.md
+        echo "" >> dependency-report.md
+        
+        # List all dependencies
+        echo "### Direct Dependencies" >> dependency-report.md
+        flutter pub deps --no-dev | head -50 >> dependency-report.md
+        
+        # Check for duplicate dependencies
+        echo "" >> dependency-report.md
+        echo "### Potential Duplicate Dependencies" >> dependency-report.md
+        flutter pub deps | grep -E '^\s{4,}' | sort | uniq -d >> dependency-report.md || true
+        
+        # Check license compatibility
+        echo "" >> dependency-report.md
+        echo "### License Information" >> dependency-report.md
+        flutter pub deps --json | jq -r '.packages[] | select(.kind == "direct") | "\(.name): \(.source)"' >> dependency-report.md
+        
+    - name: 🔍 Unused Dependencies Check
+      run: |
+        # Check for unused dependencies
+        dart pub global activate dependency_validator
+        dart pub global run dependency_validator
+        
+    - name: 📤 Upload Dependency Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: dependency-report
+        path: dependency-report.md
+
+  # Performance Analysis
+  performance-analysis:
+    runs-on: ubuntu-latest
+    name: Performance Analysis
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.1'
+        channel: 'stable'
+        cache: true
+        
+    - name: 📦 Install Dependencies
+      run: flutter pub get
+      
+    - name: 🔧 Code Generation
+      run: dart run build_runner build --delete-conflicting-outputs
+      
+    - name: 📊 Bundle Size Analysis
+      run: |
+        # Build and analyze APK size
+        flutter build apk --release --analyze-size --target-platform android-arm64 > apk-size.txt
+        
+        # Extract size information
+        echo "## APK Size Analysis" > size-report.md
+        echo "" >> size-report.md
+        cat apk-size.txt >> size-report.md
+        
+        # Check if size increased significantly
+        APK_SIZE=$(ls -la build/app/outputs/flutter-apk/app-arm64-v8a-release.apk | awk '{print $5}')
+        echo "APK Size: $APK_SIZE bytes" >> size-report.md
+        
+        # Alert if APK is too large (>50MB)
+        if [ $APK_SIZE -gt 52428800 ]; then
+          echo "⚠️ APK size is large: $(($APK_SIZE / 1048576))MB"
+        fi
+        
+    - name: 🔍 Memory Usage Analysis
+      run: |
+        # Analyze potential memory leaks
+        echo "## Memory Analysis" >> size-report.md
+        echo "" >> size-report.md
+        
+        # Check for common memory leak patterns
+        grep -r "StreamController\|Timer\|AnimationController" lib/ --include="*.dart" | grep -v "dispose\|cancel\|close" > potential-leaks.txt || true
+        if [ -s potential-leaks.txt ]; then
+          echo "### Potential Memory Leaks" >> size-report.md
+          cat potential-leaks.txt >> size-report.md
+        fi
+        
+    - name: 📤 Upload Performance Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-report
+        path: size-report.md
+
+  # Documentation Quality
+  docs-quality:
+    runs-on: ubuntu-latest
+    name: Documentation Quality
+    
+    steps:
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+      
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.1'
+        channel: 'stable'
+        cache: true
+        
+    - name: 📦 Install Dependencies
+      run: flutter pub get
+      
+    - name: 📖 Documentation Coverage
+      run: |
+        # Check for missing documentation
+        echo "## Documentation Quality Report" > docs-report.md
+        echo "" >> docs-report.md
+        
+        # Find undocumented public APIs
+        dart doc --validate-links --dry-run 2>&1 | tee -a docs-report.md
+        
+        # Check for README completeness
+        if [ ! -f "README.md" ]; then
+          echo "❌ Missing README.md file" >> docs-report.md
+        else
+          README_SIZE=$(wc -l < README.md)
+          if [ $README_SIZE -lt 20 ]; then
+            echo "⚠️ README.md seems incomplete (less than 20 lines)" >> docs-report.md
+          fi
+        fi
+        
+        # Check for CHANGELOG
+        if [ ! -f "CHANGELOG.md" ]; then
+          echo "⚠️ Missing CHANGELOG.md file" >> docs-report.md
+        fi
+        
+    - name: 📤 Upload Documentation Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: docs-report
+        path: docs-report.md
+
+  # Generate Quality Dashboard
+  quality-dashboard:
+    runs-on: ubuntu-latest
+    name: Quality Dashboard
+    needs: [code-quality, security-scan, dependency-analysis, performance-analysis, docs-quality]
+    if: always()
+    
+    steps:
+    - name: 📥 Download All Reports
+      uses: actions/download-artifact@v4
+      
+    - name: 📊 Generate Quality Dashboard
+      run: |
+        echo "# 📊 Code Quality Dashboard" > quality-dashboard.md
+        echo "" >> quality-dashboard.md
+        echo "**Build Date:** $(date)" >> quality-dashboard.md
+        echo "**Commit:** ${{ github.sha }}" >> quality-dashboard.md
+        echo "" >> quality-dashboard.md
+        
+        # Job status summary
+        echo "## 🎯 Quality Checks Status" >> quality-dashboard.md
+        echo "" >> quality-dashboard.md
+        echo "- Code Quality: ${{ needs.code-quality.result }}" >> quality-dashboard.md
+        echo "- Security Scan: ${{ needs.security-scan.result }}" >> quality-dashboard.md
+        echo "- Dependencies: ${{ needs.dependency-analysis.result }}" >> quality-dashboard.md
+        echo "- Performance: ${{ needs.performance-analysis.result }}" >> quality-dashboard.md
+        echo "- Documentation: ${{ needs.docs-quality.result }}" >> quality-dashboard.md
+        echo "" >> quality-dashboard.md
+        
+        # Combine all reports if they exist
+        for report in dependency-report/dependency-report.md performance-report/size-report.md docs-report/docs-report.md; do
+          if [ -f "$report" ]; then
+            echo "" >> quality-dashboard.md
+            cat "$report" >> quality-dashboard.md
+          fi
+        done
+        
+    - name: 📤 Upload Quality Dashboard
+      uses: actions/upload-artifact@v4
+      with:
+        name: quality-dashboard
+        path: quality-dashboard.md
+        
+    - name: 💬 Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          if (fs.existsSync('quality-dashboard.md')) {
+            const body = fs.readFileSync('quality-dashboard.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+          }

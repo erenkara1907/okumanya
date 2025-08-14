@@ -1,0 +1,212 @@
+# Fastfile for iOS deployment automation
+# This is the configuration file for fastlane.
+# https://fastlane.tools
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and test the app"
+  lane :test do
+    run_tests(
+      scheme: "Runner",
+      device: "iPhone 15 Pro"
+    )
+  end
+
+  desc "Build for development"
+  lane :build_debug do
+    gym(
+      scheme: "Runner",
+      configuration: "Debug",
+      export_method: "development",
+      skip_codesigning: true
+    )
+  end
+
+  desc "Build for App Store distribution"
+  lane :build_release do
+    # Ensure we have the latest certificates
+    sync_code_signing(
+      type: "appstore",
+      readonly: true
+    )
+    
+    # Build the app
+    gym(
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      include_bitcode: false,
+      include_symbols: true
+    )
+  end
+
+  desc "Deploy to TestFlight"
+  lane :deploy_testflight do
+    # Build the app
+    build_release
+    
+    # Upload to TestFlight
+    pilot(
+      skip_waiting_for_build_processing: false,
+      skip_submission: false,
+      notify_external_testers: false,
+      changelog: ENV["RELEASE_NOTES"] || "Bug fixes and improvements"
+    )
+    
+    # Send notification
+    slack(
+      message: "✈️ Okumanya iOS TestFlight build uploaded successfully!",
+      channel: "#releases"
+    ) if ENV["SLACK_URL"]
+  end
+
+  desc "Deploy to TestFlight for External Testing"
+  lane :deploy_external_testflight do
+    # Build the app
+    build_release
+    
+    # Upload to TestFlight with external testing
+    pilot(
+      skip_waiting_for_build_processing: false,
+      skip_submission: false,
+      notify_external_testers: true,
+      changelog: ENV["RELEASE_NOTES"] || "Bug fixes and improvements",
+      distribute_external: true,
+      groups: ["External Testers"]
+    )
+    
+    # Send notification
+    slack(
+      message: "🧪 Okumanya iOS external TestFlight build ready for testing!",
+      channel: "#releases"
+    ) if ENV["SLACK_URL"]
+  end
+
+  desc "Deploy to App Store"
+  lane :deploy_appstore do
+    # Build the app
+    build_release
+    
+    # Upload to App Store Connect
+    deliver(
+      submit_for_review: false, # Start as draft for safety
+      automatic_release: false,
+      force: true,
+      skip_metadata: false,
+      skip_screenshots: false,
+      skip_binary_upload: false,
+      precheck_include_in_app_purchases: false
+    )
+    
+    # Send notification
+    slack(
+      message: "🎉 Okumanya iOS App Store build uploaded as DRAFT!",
+      channel: "#releases"
+    ) if ENV["SLACK_URL"]
+  end
+
+  desc "Submit for App Store Review"
+  lane :submit_review do
+    deliver(
+      submit_for_review: true,
+      automatic_release: false,
+      force: true,
+      skip_metadata: true,
+      skip_screenshots: true,
+      skip_binary_upload: true,
+      submission_information: {
+        add_id_info_limits_tracking: true,
+        add_id_info_serves_ads: false,
+        add_id_info_tracks_action: true,
+        add_id_info_tracks_install: true,
+        add_id_info_uses_idfa: false,
+        content_rights_has_rights: true,
+        content_rights_contains_third_party_content: false,
+        export_compliance_platform: 'ios',
+        export_compliance_compliance_required: false,
+        export_compliance_encryption_updated: false,
+        export_compliance_app_type: nil,
+        export_compliance_uses_encryption: false,
+        export_compliance_is_exempt: false,
+        export_compliance_contains_third_party_cryptography: false,
+        export_compliance_contains_proprietary_cryptography: false,
+        export_compliance_available_on_french_store: false
+      }
+    )
+  end
+
+  desc "Generate and upload screenshots"
+  lane :screenshots do
+    # Build for screenshots
+    gym(
+      scheme: "Runner",
+      configuration: "Debug",
+      export_method: "development",
+      skip_codesigning: true
+    )
+    
+    # Generate screenshots
+    snapshot(
+      scheme: "Runner",
+      devices: [
+        "iPhone 15 Pro Max",
+        "iPhone 15 Pro", 
+        "iPhone 8 Plus",
+        "iPad Pro (12.9-inch) (6th generation)"
+      ],
+      languages: ["en-US", "tr-TR"],
+      clear_previous_screenshots: true
+    )
+    
+    # Upload screenshots
+    deliver(
+      skip_binary_upload: true,
+      skip_metadata: true,
+      overwrite_screenshots: true
+    )
+  end
+
+  desc "Update App Store metadata"
+  lane :update_metadata do
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      force: true
+    )
+  end
+
+  desc "Sync certificates and profiles"
+  lane :certificates do
+    sync_code_signing(
+      type: "development",
+      force_for_new_devices: true
+    )
+    
+    sync_code_signing(
+      type: "appstore"
+    )
+  end
+
+  desc "Register new devices"
+  lane :register_devices do
+    register_devices(
+      devices_file: "./fastlane/devices.txt"
+    )
+    
+    # Refresh profiles after adding devices
+    sync_code_signing(
+      type: "development",
+      force_for_new_devices: true
+    )
+  end
+
+  # Error handling
+  error do |lane, exception|
+    slack(
+      message: "❌ iOS deployment failed in lane: #{lane}\nError: #{exception}",
+      channel: "#releases",
+      success: false
+    ) if ENV["SLACK_URL"]
+  end
+end

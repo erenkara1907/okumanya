@@ -1,0 +1,24 @@
+// Core barrel exports - to reduce import complexity
+export 'analytics/analytics_service.dart';
+export 'constants/app_constants.dart';
+export 'cache/cache_manager.dart';
+export 'error/failures.dart';
+export 'localization/locale_keys.dart';
+export 'localization/localization_cubit.dart';
+export 'network/network_info.dart';
+export 'performance/performance_service.dart';
+export 'performance/performance_benchmarks.dart';
+export 'repository/base_repository.dart';
+export 'theme/app_theme.dart';
+export 'theme/theme_cubit.dart';
+export 'usecase/usecase.dart';
+export 'widgets/advanced_card.dart';
+export 'widgets/advanced_error_widget.dart';
+export 'widgets/advanced_loading.dart';
+export 'widgets/advanced_search_field.dart';
+export 'widgets/common/common_appbar.dart';
+export 'widgets/common/common_bottom_navbar.dart';
+export 'widgets/common/common_elevated_button.dart';
+export 'widgets/common/common_outlined_button.dart';
+export 'widgets/common/common_scaffold.dart';
+export 'widgets/common/common_textfield.dart';

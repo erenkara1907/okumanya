@@ -1,0 +1,14 @@
+# Android Signing Configuration
+# Copy this file to key.properties and fill in your actual values
+# Never commit the actual key.properties file with real values!
+
+storePassword=YOUR_KEYSTORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD  
+keyAlias=YOUR_KEY_ALIAS
+storeFile=YOUR_KEYSTORE_FILE_PATH
+
+# Example:
+# storePassword=mySecureKeystorePassword123
+# keyPassword=mySecureKeyPassword123
+# keyAlias=okumanya-release-key
+# storeFile=okumanya-release-key.jks
