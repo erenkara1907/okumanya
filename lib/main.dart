@@ -9,6 +9,9 @@ import 'package:okumanya/features/home/presentation/bloc/reading/reading_bloc.da
 import 'package:okumanya/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'core/app/my_app.dart';
+import 'core/analytics/analytics_service.dart';
+import 'core/performance/performance_service.dart';
+import 'core/monitoring/app_monitor.dart';
 import 'shared/hive/hive_init.dart';
 import 'shared/config/app_config.dart';
 import 'shared/di/service_locator.dart';
@@ -29,6 +32,20 @@ Future<void> main() async {
 
   // Initialize dependency injection
   await configureDependencies();
+
+  // Initialize analytics service
+  final analyticsService = getIt<AnalyticsService>();
+  await analyticsService.initialize();
+
+  // Initialize performance service
+  final performanceService = getIt<PerformanceService>();
+
+  // Initialize app monitor
+  final appMonitor = getIt<AppMonitor>();
+  await appMonitor.initialize();
+
+  // Track app startup
+  appMonitor.trackAppLifecycle('app_started');
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

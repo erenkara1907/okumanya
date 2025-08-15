@@ -5,6 +5,9 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/advanced_card.dart';
 import '../../../../core/widgets/advanced_loading.dart';
 import '../../../../core/widgets/advanced_error_widget.dart';
+import '../../../../core/monitoring/app_monitor.dart';
+import '../../../../core/utils/string_extensions.dart';
+import '../../../../shared/di/service_locator.dart';
 import '../../domain/entities/book.dart';
 
 /// Advanced book card with enhanced UI and animations
@@ -37,7 +40,18 @@ class AdvancedBookCard extends StatelessWidget {
       height: height,
       child: AdvancedCard(
         padding: const EdgeInsets.all(AppConstants.smallPadding + 4),
-        onTap: onTap,
+        onTap: () {
+          // Track book interaction
+          final appMonitor = getIt<AppMonitor>();
+          appMonitor.trackFeatureUsage('book_card', action: 'tap', parameters: {
+            'book_id': book.id,
+            'book_title': book.title,
+            'book_category': book.category,
+            'progress': book.progress,
+          });
+
+          onTap?.call();
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -158,7 +172,7 @@ class AdvancedBookCard extends StatelessWidget {
                 children: [
                   // Title
                   Text(
-                    book.title,
+                    book.formattedTitle,
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -232,6 +246,19 @@ class AdvancedBookCard extends StatelessWidget {
                             minHeight: 6,
                           ),
                         ),
+                        // Last read time
+                        if (book.lastReadTimeRelative() != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              'Son okunan: ${book.lastReadTimeRelative(locale: 'tr_TR')}',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.6),
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                 ],

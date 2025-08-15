@@ -154,7 +154,8 @@ class _DotsLoadingState extends State<_DotsLoading>
     _controllers = List.generate(
       3,
       (index) => AnimationController(
-        duration: const Duration(milliseconds: 600), // Custom animation duration
+        duration:
+            const Duration(milliseconds: 600), // Custom animation duration
         vsync: this,
       ),
     );

@@ -10,6 +10,10 @@ import '../../../../core/widgets/common/common_elevated_button.dart';
 import '../../../../core/widgets/common/common_scaffold.dart';
 import '../../../../core/widgets/common/common_textfield.dart';
 import '../../../../core/widgets/advanced_loading.dart';
+import '../../../../core/analytics/analytics_service.dart';
+import '../../../../core/monitoring/app_monitor.dart';
+import '../../../../core/utils/validation_utils.dart';
+import '../../../../shared/di/service_locator.dart';
 import '../bloc/login_bloc.dart';
 
 @RoutePage()
@@ -24,11 +28,19 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late AnalyticsService _analyticsService;
+  late AppMonitor _appMonitor;
 
   @override
   void initState() {
     formKey = GlobalKey<FormState>();
+    _analyticsService = getIt<AnalyticsService>();
+    _appMonitor = getIt<AppMonitor>();
     super.initState();
+
+    // Track screen view
+    _analyticsService.trackScreen('LoginPage');
+    _appMonitor.trackUserInteraction('screen_view', screen: 'LoginPage');
   }
 
   @override
@@ -52,6 +64,10 @@ class _LoginPageState extends State<LoginPage> {
             print('✅ LoginPage: Login successful, navigating to main page');
             log('✅ LoginPage: Login successful, navigating to main page',
                 name: 'LoginPage');
+
+            // Track successful login
+            _analyticsService.trackEvent('user_login_success');
+
             Fluttertoast.showToast(
               msg: "Giriş başarılı! Anasayfaya yönlendiriliyorsunuz...",
               gravity: ToastGravity.CENTER,
@@ -66,6 +82,13 @@ class _LoginPageState extends State<LoginPage> {
                 '❌ LoginPage: Login failed with error: ${state.errorMessage}');
             log('❌ LoginPage: Login failed with error: ${state.errorMessage}',
                 name: 'LoginPage');
+
+            // Track login failure
+            _analyticsService.trackEvent('user_login_failed', parameters: {
+              'error_message': state.errorMessage,
+              'error_type': state.status.name,
+            });
+
             Fluttertoast.showToast(
               msg: 'Hata: ${state.errorMessage}',
               gravity: ToastGravity.CENTER,
@@ -91,20 +114,12 @@ class _LoginPageState extends State<LoginPage> {
                     borderColor: AppColors.defaultAppColor.primaryColor
                         .withValues(alpha: 0.8),
                     hintText: "E-posta",
-                    textInputType: TextInputType.emailAddress,
+                    fieldType: TextFieldType.email,
+                    autoValidate: true,
                     prefixIcon: Icon(
                       Icons.email_outlined,
                       color: AppColors.defaultAppColor.primaryColor,
                     ),
-                    validator: (email) {
-                      if (email == null || email.isEmpty) {
-                        return "E-posta adresi gerekli";
-                      } else if (!email.contains('@') || !email.contains('.')) {
-                        return "Geçerli bir e-posta adresi girin";
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
                   SizedBox(height: 20.h),
                   CommonTextField(
@@ -119,6 +134,11 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: state.obscure,
                     suffixIcon: IconButton(
                       onPressed: () {
+                        _appMonitor.trackUserInteraction(
+                          'password_visibility_toggle',
+                          screen: 'LoginPage',
+                          element: 'password_field',
+                        );
                         context.read<LoginBloc>().add(ObscureText());
                       },
                       icon: state.obscure
@@ -131,13 +151,9 @@ class _LoginPageState extends State<LoginPage> {
                               color: AppColors.defaultAppColor.primaryColor,
                             ),
                     ),
-                    validator: (pass) {
-                      if (pass == null || pass.isEmpty) {
-                        return "Şifre gerekli";
-                      } else {
-                        return null;
-                      }
-                    },
+                    autoValidate: true,
+                    validator: (pass) => ValidationUtils.validatePassword(pass,
+                        minLength: 6, locale: 'tr_TR'),
                   ),
                   SizedBox(height: 50.h),
                   CommonElevatedButton(
@@ -161,6 +177,21 @@ class _LoginPageState extends State<LoginPage> {
                               '🚀 LoginPage: Attempting login with email: $email');
                           log('🚀 LoginPage: Attempting login with email: $email',
                               name: 'LoginPage');
+
+                          // Track login attempt
+                          _analyticsService
+                              .trackEvent('user_login_attempt', parameters: {
+                            'email_domain': email.split('@').last,
+                          });
+
+                          _appMonitor.trackUserInteraction(
+                            'login_button_tap',
+                            screen: 'LoginPage',
+                            element: 'login_button',
+                            additionalData: {
+                              'email_domain': email.split('@').last,
+                            },
+                          );
 
                           context.read<LoginBloc>().add(
                                 Login(

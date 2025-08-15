@@ -76,7 +76,8 @@ class AdvancedErrorWidget extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _getErrorColor(type),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: AppConstants.smallPadding + 4),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: AppConstants.smallPadding + 4),
                 ),
               ),
             ),

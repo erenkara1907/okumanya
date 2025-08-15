@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
+import '../utils/string_extensions.dart';
 
 /// Advanced search field with debouncing and enhanced UX
 class AdvancedSearchField extends StatefulWidget {
@@ -68,7 +69,9 @@ class _AdvancedSearchFieldState extends State<AdvancedSearchField> {
       // Debounce the search
       Future.delayed(widget.debounceDelay, () {
         if (mounted && _controller.text == currentValue) {
-          widget.onSearchChanged?.call(currentValue);
+          // Convert search text to search-friendly format for better matching
+          final searchText = currentValue.toSearchFormat();
+          widget.onSearchChanged?.call(searchText);
         }
       });
     }

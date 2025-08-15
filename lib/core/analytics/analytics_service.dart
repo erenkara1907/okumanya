@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import '../utils/date_utils.dart';
 
 /// Custom analytics service for tracking user behavior,
 /// performance metrics, and errors (Firebase removed)
@@ -97,7 +98,7 @@ class AnalyticsService {
     await trackEvent('book_$action', parameters: parameters);
   }
 
-  /// Track reading session
+  /// Track reading session with enhanced time analytics
   Future<void> trackReadingSession({
     required String bookId,
     required String sessionId,
@@ -105,7 +106,12 @@ class AnalyticsService {
     required int pagesRead,
     double? startProgress,
     double? endProgress,
+    DateTime? sessionStart,
   }) async {
+    final now = DateTime.now();
+    final timeCategory = now.getReadingTimeCategory(locale: 'tr_TR');
+    final isReadingHours = now.isReadingHours;
+
     await trackEvent('reading_session_complete', parameters: {
       'book_id': bookId,
       'session_id': sessionId,
@@ -114,6 +120,11 @@ class AnalyticsService {
       'start_progress': startProgress,
       'end_progress': endProgress,
       'progress_delta': (endProgress ?? 0) - (startProgress ?? 0),
+      'reading_time_category': timeCategory,
+      'is_prime_reading_hours': isReadingHours,
+      'session_date': now.toFormattedDate(locale: 'tr_TR'),
+      'day_of_week': now.weekday,
+      'hour_of_day': now.hour,
     });
   }
 

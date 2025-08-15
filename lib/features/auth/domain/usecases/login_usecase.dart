@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:okumanya/core/usecase/usecase.dart';
 
 import '../../../../core/error/failures.dart';
-import '../../../../core/usecases/usecase.dart';
 import '../entities/login_entity.dart';
 import '../repositories/auth_repository.dart';
 

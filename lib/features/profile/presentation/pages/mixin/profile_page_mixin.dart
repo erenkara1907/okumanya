@@ -98,6 +98,20 @@ mixin ProfilePageMixin {
               SizedBox(height: 5.h),
               _infoAnswer(context, text: '12. Sayfa', totalBookPages: '58'),
               SizedBox(height: 14.h),
+              _infoQuestion(context, text: 'son okuma tarihi'),
+              SizedBox(height: 5.h),
+              _infoAnswer(context,
+                  text: DateTime.now()
+                      .subtract(const Duration(days: 2))
+                      .toRelativeTime(locale: 'tr_TR')),
+              SizedBox(height: 14.h),
+              _infoQuestion(context, text: 'okuma süresinin kategorisi'),
+              SizedBox(height: 5.h),
+              _infoAnswer(context,
+                  text: DateTime.now()
+                      .subtract(const Duration(days: 2))
+                      .getReadingTimeCategory(locale: 'tr_TR')),
+              SizedBox(height: 14.h),
               _infoQuestion(context, text: 'okuma seviyesi'),
               SizedBox(height: 5.h),
               _infoAnswer(context, text: '1. Seviye'),

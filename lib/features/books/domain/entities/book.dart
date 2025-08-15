@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/utils/date_utils.dart';
+import '../../../../core/utils/string_extensions.dart';
 
 part 'book.freezed.dart';
 
@@ -36,5 +38,60 @@ class Book with _$Book {
       return '$currentPage / $totalPages';
     }
     return '${(progressPercentage * 100).toInt()}%';
+  }
+
+  /// Returns formatted title with proper book title case
+  String get formattedTitle => title.toBookTitleCase();
+
+  /// Returns author initials for avatar
+  String get authorInitials => author.getInitials();
+
+  /// Returns last read time in relative format
+  String? lastReadTimeRelative({String? locale}) {
+    return lastReadAt?.toRelativeTime(locale: locale);
+  }
+
+  /// Returns formatted last read date
+  String? lastReadDateFormatted({String? locale}) {
+    return lastReadAt?.toFormattedDate(locale: locale);
+  }
+
+  /// Returns reading streak status
+  bool get wasReadToday {
+    return lastReadAt?.isToday ?? false;
+  }
+
+  /// Returns reading time category when last read
+  String? getLastReadingTimeCategory({String? locale}) {
+    return lastReadAt?.getReadingTimeCategory(locale: locale);
+  }
+
+  /// Returns truncated description for card display
+  String? get shortDescription {
+    return description?.truncateAtWord(100);
+  }
+
+  /// Returns search-friendly text combining title and author
+  String get searchText {
+    return '$title $author'.toSearchFormat();
+  }
+
+  /// Returns estimated reading time based on pages
+  int? get estimatedReadingTime {
+    if (totalPages == null) return null;
+    // Assuming 250 words per page and 200 words per minute reading speed
+    final totalWords = totalPages! * 250;
+    return (totalWords / 200).ceil();
+  }
+
+  /// Returns time needed to complete remaining pages
+  int? get timeToComplete {
+    if (totalPages == null || currentPage == null) return null;
+    final remainingPages = totalPages! - currentPage!;
+    if (remainingPages <= 0) return 0;
+
+    // Assuming 250 words per page and 200 words per minute reading speed
+    final remainingWords = remainingPages * 250;
+    return (remainingWords / 200).ceil();
   }
 }

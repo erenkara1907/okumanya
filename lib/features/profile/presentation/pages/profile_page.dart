@@ -11,9 +11,13 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../../../core/widgets/common/common_appbar.dart';
 import '../../../../core/widgets/common/common_scaffold.dart';
 import '../../../../core/auth/auth_service.dart';
+import '../../../../core/monitoring/app_monitor.dart';
+import '../../../../core/utils/date_utils.dart';
+import '../../../../core/utils/string_extensions.dart';
 import '../../../../shared/di/service_locator.dart';
 import '../../../../shared/navigation/routes/app_router.gr.dart';
 import '../bloc/profile_bloc.dart';
+import '../widgets/profile_edit_form.dart';
 
 part './mixin/profile_page_mixin.dart';
 
@@ -25,12 +29,27 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with SingleTickerProviderStateMixin, ProfilePageMixin {
+class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin, ProfilePageMixin {
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 5, vsync: this);
+
+    // Track screen view
+    final appMonitor = getIt<AppMonitor>();
+    appMonitor.trackUserInteraction('screen_view', screen: 'ProfilePage');
+  }
+
+  String _getThisWeekReadingDays() {
+    // Simulate reading days for this week
+    final mockReadingDates = [
+      DateTime.now().subtract(const Duration(days: 1)),
+      DateTime.now().subtract(const Duration(days: 3)),
+      DateTime.now().subtract(const Duration(days: 5)),
+    ];
+
+    final thisWeekDays = DateUtilsHelper.getThisWeekReadingDays(mockReadingDates);
+    return '${thisWeekDays.length} gün';
   }
 
   @override
@@ -71,9 +90,25 @@ class _ProfilePageState extends State<ProfilePage>
                       Center(child: Text("Hedeflerim İçeriği")),
                       Center(child: Text("Puan & Yorumlarım İçeriği")),
                       Center(
-                        child: GradientButton(
-                          text: 'Çıkış Yap',
-                          onPressed: () => _logout(context),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GradientButton(
+                              text: 'Profil Düzenle',
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const ProfileEditForm(),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            GradientButton(
+                              text: 'Çıkış Yap',
+                              onPressed: () => _logout(context),
+                            ),
+                          ],
                         ),
                       ),
                       Padding(

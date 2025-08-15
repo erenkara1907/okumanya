@@ -15,12 +15,16 @@ class ShimmerPlaceholder extends StatelessWidget {
     super.key,
     required this.width,
     required this.height,
-  }) : borderRadius = null, _child = null;
+  })  : borderRadius = null,
+        _child = null;
 
   const ShimmerPlaceholder.custom({
     super.key,
     required Widget child,
-  }) : width = 0, height = 0, borderRadius = null, _child = child;
+  })  : width = 0,
+        height = 0,
+        borderRadius = null,
+        _child = child;
 
   final double width;
   final double height;
@@ -39,8 +43,8 @@ class ShimmerPlaceholder extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: borderRadius != null 
-              ? BorderRadius.circular(borderRadius!) 
+          borderRadius: borderRadius != null
+              ? BorderRadius.circular(borderRadius!)
               : BorderRadius.circular(AppConstants.defaultRadius),
         ),
       ),
@@ -71,11 +75,12 @@ class BookCardShimmer extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppConstants.smallPadding),
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.smallPadding),
                   ),
                 ),
               ),
-              
+
               Padding(
                 padding: const EdgeInsets.all(AppConstants.smallPadding),
                 child: Column(
@@ -90,9 +95,9 @@ class BookCardShimmer extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    
+
                     const SizedBox(height: AppConstants.smallPadding),
-                    
+
                     // Author placeholder
                     Container(
                       width: 100,
@@ -102,9 +107,9 @@ class BookCardShimmer extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    
+
                     const SizedBox(height: AppConstants.smallPadding),
-                    
+
                     // Category placeholder
                     Container(
                       width: 60,
@@ -150,8 +155,12 @@ class ListShimmer extends StatelessWidget {
           width: scrollDirection == Axis.horizontal ? itemWidth : null,
           height: scrollDirection == Axis.vertical ? itemHeight : null,
           margin: EdgeInsets.only(
-            bottom: scrollDirection == Axis.vertical ? AppConstants.smallPadding : 0,
-            right: scrollDirection == Axis.horizontal ? AppConstants.smallPadding : 0,
+            bottom: scrollDirection == Axis.vertical
+                ? AppConstants.smallPadding
+                : 0,
+            right: scrollDirection == Axis.horizontal
+                ? AppConstants.smallPadding
+                : 0,
           ),
           child: Shimmer(
             child: Container(

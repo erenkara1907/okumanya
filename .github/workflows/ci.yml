@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions:
+  contents: write  # Required for auto-commit
+
 jobs:
   # Static Analysis & Tests
   analyze:
@@ -28,17 +31,17 @@ jobs:
     - name: 🔍 Verify Dependencies
       run: flutter pub deps
       
-    - name: 🧹 Auto Format & Check
+    - name: 🧹 Auto Format & Commit
       run: |
         dart format .
         if ! git diff --exit-code; then
-          echo "❌ Code formatting issues found!"
-          echo "📋 Files that need formatting:"
-          git diff --name-only
-          echo ""
-          echo "🔧 To fix locally, run: dart format ."
-          echo "📤 Then commit and push the changes."
-          exit 1
+          echo "📝 Auto-formatting files..."
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Auto-format Dart files [skip ci]"
+          git push
+          echo "✅ Files formatted and committed!"
         else
           echo "✅ All files are properly formatted!"
         fi
