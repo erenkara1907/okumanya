@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide outlines the best practices, conventions, and standards followed in the Okumanya project to ensure code quality, maintainability, and team collaboration.
+This guide outlines the best practices, conventions, and standards followed in the **Okumanya** project to ensure code quality, maintainability, and team collaboration. Built with Flutter using Clean Architecture principles and Firebase-free custom analytics.
 
 ## 📋 Table of Contents
 
@@ -35,9 +35,9 @@ class UserProfileModel {}
 String userName = 'John';
 void fetchUserData() {}
 
-# Use SCREAMING_SNAKE_CASE for constants
-const String API_BASE_URL = 'https://api.okumanya.com';
-const int DEFAULT_TIMEOUT = 30000;
+# Use camelCase for constants (following Dart conventions)
+const String apiBaseUrl = 'https://api.okumanya.com';
+const int defaultTimeout = 30000;
 ```
 
 ### 📦 Import Organization
@@ -55,6 +55,9 @@ import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 
 // 4. Project imports (use barrel exports when possible)
 import 'package:okumanya/core/core.dart';
@@ -646,8 +649,9 @@ class TokenStorage {
 // ❌ DON'T: Store sensitive data in plain text
 class BadTokenStorage {
   static Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token); // ❌ Plain text storage
+    // ❌ Using Hive without encryption for sensitive data
+    final box = await Hive.openBox('tokens');
+    await box.put('auth_token', token); // ❌ Plain text storage
   }
 }
 ```
@@ -660,6 +664,10 @@ final dio = Dio(BaseOptions(
   baseUrl: 'https://api.okumanya.com', // ✅ HTTPS
   connectTimeout: Duration(milliseconds: AppConstants.connectTimeout),
   receiveTimeout: Duration(milliseconds: AppConstants.receiveTimeout),
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
 ));
 
 // ✅ DO: Validate input data

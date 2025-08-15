@@ -2,7 +2,7 @@
 
 ## Overview
 
-Okumanya follows **Clean Architecture** principles with a feature-driven development approach, ensuring maintainability, testability, and scalability.
+**Okumanya** follows **Clean Architecture** principles with a feature-driven development approach, ensuring maintainability, testability, and scalability. Built with Flutter 3.24.1 and modern development practices including Firebase-free custom analytics.
 
 ## 📋 Table of Contents
 
@@ -18,7 +18,7 @@ Okumanya follows **Clean Architecture** principles with a feature-driven develop
 
 ### 🎯 Presentation Layer
 - **Responsibility**: UI components, state management, user interactions
-- **Technologies**: Flutter Widgets, BLoC pattern, Auto Route
+- **Technologies**: Flutter Widgets, BLoC pattern with Freezed, Auto Route
 - **Location**: `lib/features/*/presentation/`
 
 ```dart
@@ -56,7 +56,7 @@ class GetBooks extends UseCase<List<Book>, NoParams> {
 
 ### 💾 Data Layer
 - **Responsibility**: Data sources, models, repository implementations
-- **Technologies**: Dio, Hive, JSON serialization
+- **Technologies**: Dio, Hive, JSON serialization, FlutterSecureStorage
 - **Location**: `lib/features/*/data/`
 
 ```dart
@@ -95,17 +95,17 @@ class BooksRepositoryImpl implements BooksRepository {
 ```
 lib/
 ├── core/                        # Core functionality
-│   ├── analytics/              # Analytics services
-│   ├── cache/                  # Caching mechanisms
+│   ├── analytics/              # Custom analytics services (Firebase-free)
+│   ├── cache/                  # Caching mechanisms (Hive)
 │   ├── constants/              # App constants
-│   ├── di/                     # Dependency injection
+│   ├── di/                     # Dependency injection (Injectable/GetIt)
 │   ├── error/                  # Error handling
-│   ├── localization/           # Internationalization
-│   ├── network/                # Network utilities
+│   ├── localization/           # Internationalization (easy_localization)
+│   ├── network/                # Network utilities (Dio)
 │   ├── performance/            # Performance monitoring
-│   ├── repository/             # Base repository
-│   ├── theme/                  # Theme management
-│   ├── usecase/               # Base use case
+│   ├── repository/             # Base repository pattern
+│   ├── theme/                  # Theme management (Material Design 3.0)
+│   ├── usecase/               # Base use case pattern
 │   └── widgets/               # Reusable widgets
 ├── features/                   # Feature modules
 │   ├── auth/                  # Authentication
@@ -203,7 +203,7 @@ State → UI → Loading → Caching → Response
 ## Dependency Management
 
 ### 🎯 Dependency Injection
-Using `Injectable` and `GetIt` for dependency management:
+Using `Injectable` and `GetIt` for dependency management (replacing manual DI setup):
 
 ```dart
 @module

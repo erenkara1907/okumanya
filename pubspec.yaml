@@ -11,67 +11,76 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # 🎨 UI & Design
   cupertino_icons: ^1.0.8
   flutter_screenutil: ^5.9.3
-  easy_localization: ^3.0.7
-  flutter_bloc: ^8.1.6
-  hive_flutter: ^1.1.0
-  path_provider: ^2.1.5
-  dartz: ^0.10.1
-  auto_route: ^8.1.3
-  dio: ^5.7.0
-  equatable: ^2.0.7
-  fluttertoast: ^8.2.10
-  build_runner: ^2.4.13
   persistent_bottom_nav_bar: ^6.2.1
   curved_navigation_bar: ^1.0.6
   percent_indicator: ^4.2.4
-  kartal: ^4.1.0
-  flutter_dotenv: ^5.1.0
-  flutter_secure_storage: ^9.2.2
-  get_it: ^7.6.4
   
-  # Clean Architecture & Advanced Patterns
+  # 🧭 Navigation & Routing
+  auto_route: ^8.1.3
+  
+  # 🏗️ State Management & Architecture
+  flutter_bloc: ^8.1.6
+  dartz: ^0.10.1
+  equatable: ^2.0.7
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
+  
+  # 💉 Dependency Injection
+  get_it: ^7.6.4
   injectable: ^2.3.2
   
-  # Testing & Code Generation
-  mockito: ^5.4.2
-  bloc_test: ^9.1.4
-  
-  # Network & Caching
-  cached_network_image: ^3.3.1
+  # 🌐 Network & API
+  dio: ^5.7.0
   connectivity_plus: ^6.0.5
-  hive: ^2.2.3
-  device_info_plus: ^10.1.2
+  cached_network_image: ^3.3.1
   
-  # Custom Analytics & Performance (Firebase removed)
-  # Will use custom analytics implementation
+  # 💾 Local Storage & Caching
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.5
+  flutter_secure_storage: ^9.2.2
+  
+  # 🌍 Internationalization & Localization
+  easy_localization: ^3.0.7
+  
+  # 🔧 Utilities & Helpers
+  kartal: ^4.1.0
+  flutter_dotenv: ^5.1.0
+  device_info_plus: ^10.1.2
+  fluttertoast: ^8.2.10
+  
+  # 🏗️ Build & Code Generation
+  build_runner: ^2.4.13
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # 🏗️ Code Generation
   auto_route_generator: ^8.0.0
   hive_generator: ^2.0.1
-  flutter_lints: ^5.0.0
-  
-  # Code Generation
   freezed: ^2.4.7
   json_serializable: ^6.7.1
   injectable_generator: ^2.4.1
   
-  # Testing
+  # 🧪 Testing
   integration_test:
     sdk: flutter
-  patrol: ^3.6.1
   flutter_driver:
     sdk: flutter
   test: ^1.24.0
+  patrol: ^3.6.1
   flutter_gherkin: ^2.0.0
   alchemist: ^0.9.0
+  mockito: ^5.4.2
+  bloc_test: ^9.1.4
+  
+  # 📏 Code Quality & Linting
+  flutter_lints: ^5.0.0
 
 flutter:
 

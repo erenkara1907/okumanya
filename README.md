@@ -2,10 +2,12 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter Version](https://img.shields.io/badge/Flutter-3.24.1-blue.svg)](https://flutter.dev/)
-[![Code Quality](https://img.shields.io/badge/Code%20Quality-A+-brightgreen.svg)]()
-[![Architecture](https://img.shields.io/badge/Architecture-Clean-blue.svg)]()
+[![Dart Version](https://img.shields.io/badge/Dart-3.6.1-blue.svg)](https://dart.dev/)
+[![Code Quality](https://img.shields.io/badge/Code%20Quality-A+-brightgreen.svg)](https://github.com/erenkara1907/okumanya/actions)
+[![Architecture](https://img.shields.io/badge/Architecture-Clean-blue.svg)](ARCHITECTURE.md)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-brightgreen.svg)](https://github.com/erenkara1907/okumanya/actions)
 
-A modern, feature-rich personal digital library application built with Flutter, implementing **Clean Architecture** principles and enterprise-level best practices. Built with performance, scalability, and maintainability in mind.
+**Okumanya** is a modern, feature-rich personal digital library application built with Flutter, implementing **Clean Architecture** principles and enterprise-level best practices. Designed with performance, scalability, and maintainability as top priorities.
 
 ## 📱 Screenshots
 
@@ -13,7 +15,8 @@ A modern, feature-rich personal digital library application built with Flutter, 
 
 ## ✨ Features
 
-### 📱 Core Functionality
+### 📱 Core Features
+
 - **Smart Book Management** - Add, organize, and track your reading progress
 - **Advanced Search & Filtering** - Find books by title, author, category, or reading status
 - **Reading Progress Tracking** - Visual progress indicators and reading statistics
@@ -21,8 +24,9 @@ A modern, feature-rich personal digital library application built with Flutter, 
 - **Multi-language Support** - Available in Turkish, English, and more
 - **Dark/Light Theme** - Adaptive themes following Material Design 3.0
 
-### 🎯 Advanced Features  
-- **Custom Analytics** - Built-in performance and usage tracking (Firebase-free)
+### 🎯 Advanced Features
+
+- **Custom Analytics** - Firebase-free built-in performance and usage tracking
 - **Reading Analytics** - Detailed insights into your reading patterns
 - **Smart Caching** - Intelligent offline-first data management
 - **Performance Monitoring** - Real-time app performance benchmarking
@@ -44,6 +48,7 @@ A modern, feature-rich personal digital library application built with Flutter, 
 ## 🏗️ Architecture
 
 ### Clean Architecture
+
 ```
 lib/
 ├── core/                    # 🎯 Core functionality & utilities
@@ -72,6 +77,7 @@ lib/
 ```
 
 ### Key Design Patterns
+
 - **Clean Architecture** - Separation of concerns with clear boundaries
 - **SOLID Principles** - Maintainable and extensible codebase
 - **BLoC Pattern** - Predictable state management with Freezed
@@ -82,6 +88,7 @@ lib/
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Flutter SDK**: 3.24.1 or higher
 - **Dart SDK**: 3.6.1 or higher
 - **Android Studio** / **Xcode** for platform-specific development
@@ -91,7 +98,7 @@ lib/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/okumanya.git
+   git clone https://github.com/erenkara1907/okumanya.git
    cd okumanya
    ```
 
@@ -119,6 +126,7 @@ lib/
 ## 📋 Available Scripts
 
 ### Development Scripts
+
 ```bash
 # Run tests with coverage
 ./scripts/run_tests.sh all
@@ -132,6 +140,7 @@ lib/
 ```
 
 ### Development Commands
+
 ```bash
 # Start development server
 flutter run
@@ -152,6 +161,7 @@ dart run build_runner build --delete-conflicting-outputs
 ## 🧪 Testing
 
 ### Test Structure
+
 ```
 test/
 ├── unit/                   # Unit tests
@@ -161,6 +171,7 @@ test/
 ```
 
 ### Running Tests
+
 ```bash
 # All tests with coverage
 ./scripts/run_tests.sh all
@@ -172,6 +183,7 @@ test/
 ```
 
 ### Test Coverage
+
 - **Target**: >80% code coverage
 - **Current**: Check latest CI run for current coverage
 - **Reports**: Generated in `coverage/html/index.html`
@@ -179,6 +191,7 @@ test/
 ## 🚀 Deployment
 
 ### Automated Deployment
+
 The project uses GitHub Actions for automated CI/CD:
 
 - **Continuous Integration**: Runs on every push/PR
@@ -187,6 +200,7 @@ The project uses GitHub Actions for automated CI/CD:
 - **Automated Deployment**: Deploy to stores on release tags
 
 ### Manual Deployment
+
 ```bash
 # Deploy to internal testing
 ./scripts/deploy.sh both internal staging
@@ -196,6 +210,7 @@ The project uses GitHub Actions for automated CI/CD:
 ```
 
 ### Store Deployment Tracks
+
 - **Internal**: Development team testing
 - **Alpha**: Extended team testing
 - **Beta**: Public beta testing
@@ -204,12 +219,14 @@ The project uses GitHub Actions for automated CI/CD:
 ## 📊 Monitoring & Analytics
 
 ### Integrated Services
-- **Firebase Analytics** - User behavior tracking
-- **Firebase Crashlytics** - Crash reporting and analysis  
-- **Firebase Performance** - App performance monitoring
-- **Custom Analytics** - Reading pattern analysis
+
+- **Custom Analytics** - Custom analytics service (Firebase-free)
+- **Performance Monitoring** - App performance tracking
+- **Error Tracking** - Error tracking and analysis
+- **Reading Analytics** - Reading pattern analysis
 
 ### Key Metrics Tracked
+
 - User engagement and retention
 - Reading session duration and frequency
 - App performance and crash rates
@@ -219,6 +236,7 @@ The project uses GitHub Actions for automated CI/CD:
 ## 🌐 Internationalization
 
 ### Supported Languages
+
 - 🇹🇷 **Turkish** (tr-TR) - Primary
 - 🇺🇸 **English** (en-US) - Secondary
 - 🇩🇪 **German** (de-DE) - Coming soon
@@ -226,6 +244,7 @@ The project uses GitHub Actions for automated CI/CD:
 - 🇪🇸 **Spanish** (es-ES) - Coming soon
 
 ### Adding New Languages
+
 1. Add locale to `supportedLocales` in `LocalizationCubit`
 2. Create language file: `assets/lang/[locale].json`
 3. Update `EasyLocalization` configuration in `main.dart`
@@ -233,12 +252,14 @@ The project uses GitHub Actions for automated CI/CD:
 ## 🎨 UI/UX Design
 
 ### Design System
+
 - **Material Design 3.0** - Modern, accessible design language
 - **Adaptive Themes** - Light/dark mode support
 - **Responsive Design** - Works on phones, tablets, and desktop
 - **Accessibility** - Screen reader support and high contrast modes
 
 ### Key UI Components
+
 - **Advanced Cards** - Interactive book cards with animations
 - **Smart Search** - Real-time search with filters
 - **Progress Indicators** - Visual reading progress tracking
@@ -247,21 +268,24 @@ The project uses GitHub Actions for automated CI/CD:
 ## 🔧 Configuration
 
 ### Environment Variables
+
 ```bash
 # API Configuration
 API_BASE_URL=https://api.okumanya.com
 API_TIMEOUT=30000
 
-# Firebase Configuration  
-FIREBASE_API_KEY=your-api-key
-FIREBASE_PROJECT_ID=okumanya-app
-
-# Analytics
+# Custom Analytics (Firebase-free)
 ENABLE_ANALYTICS=true
-ENABLE_CRASHLYTICS=true
+ENABLE_PERFORMANCE_MONITORING=true
+
+# App Configuration
+DEBUG_MODE=true
+LOG_LEVEL=debug
+CACHE_ENABLED=true
 ```
 
 ### Build Configuration
+
 - **Android**: Configured in `android/app/build.gradle`
 - **iOS**: Configured in `ios/Runner.xcodeproj`
 - **Build scripts**: Available in `scripts/` directory
@@ -269,6 +293,7 @@ ENABLE_CRASHLYTICS=true
 ## 📈 Performance
 
 ### Optimization Techniques
+
 - **Code splitting** - Lazy loading of features
 - **Image optimization** - Cached network images with compression
 - **Database optimization** - Efficient Hive/SQLite usage
@@ -276,6 +301,7 @@ ENABLE_CRASHLYTICS=true
 - **Bundle optimization** - Minimized app size with tree shaking
 
 ### Performance Monitoring
+
 - Real-time performance tracking
 - Memory usage monitoring  
 - Network request optimization
@@ -294,6 +320,7 @@ ENABLE_CRASHLYTICS=true
 We welcome contributions! Please read our contributing guidelines:
 
 ### Quick Start
+
 1. Fork the repository
 2. Create feature branch: `git checkout -b feature/amazing-feature`
 3. Follow our [Best Practices](BEST_PRACTICES.md)
@@ -302,12 +329,14 @@ We welcome contributions! Please read our contributing guidelines:
 6. Submit a pull request
 
 ### Development Standards
+
 - **Architecture**: Follow Clean Architecture principles
 - **Code Style**: Use `dart format` and fix `flutter analyze` warnings
 - **Testing**: Maintain >80% test coverage
 - **Documentation**: Update relevant docs with changes
 
 ### Pull Request Checklist
+
 - [ ] Code follows [Best Practices](BEST_PRACTICES.md)
 - [ ] Tests added/updated and passing
 - [ ] Documentation updated
@@ -329,13 +358,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support & Community
 
 ### 🆘 Getting Help
+
 - **📖 Documentation**: Start with our comprehensive [docs](DEVELOPMENT.md)
-- **🐛 Bug Reports**: [Create an issue](https://github.com/your-username/okumanya/issues/new?template=bug_report.md)
-- **💡 Feature Requests**: [Suggest new features](https://github.com/your-username/okumanya/issues/new?template=feature_request.md)
-- **💬 Discussions**: [Join community discussions](https://github.com/your-username/okumanya/discussions)
+- **🐛 Bug Reports**: [Create an issue](https://github.com/erenkara1907/okumanya/issues/new?template=bug_report.md)
+- **💡 Feature Requests**: [Suggest new features](https://github.com/erenkara1907/okumanya/issues/new?template=feature_request.md)
+- **💬 Discussions**: [Join community discussions](https://github.com/erenkara1907/okumanya/discussions)
 
 ### 🐛 Reporting Issues
+
 When reporting bugs, please include:
+
 - **Flutter Version**: `flutter --version`
 - **Platform**: Android/iOS version and device
 - **Steps to Reproduce**: Clear, step-by-step instructions
@@ -356,6 +388,10 @@ When reporting bugs, please include:
 
 **Built with ❤️ using Flutter & Clean Architecture**
 
-⭐ **[Star this repo](https://github.com/your-username/okumanya)** if you found it helpful!
+⭐ **[Star this repo](https://github.com/erenkara1907/okumanya)** if you found it helpful!
+
+---
+
+**Okumanya** - Elevate your reading experience to the next level! 📚✨
 
 </div>

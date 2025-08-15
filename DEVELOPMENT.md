@@ -2,15 +2,16 @@
 
 ## Getting Started
 
-This guide will help you set up the development environment and contribute to the Okumanya project.
+This guide will help you set up the development environment and contribute to the **Okumanya** project - a modern Flutter book management application built with Clean Architecture principles.
 
 ## 📋 Prerequisites
 
 ### Required Software
 - **Flutter SDK**: 3.24.1 or higher
-- **Dart SDK**: 3.6.1 or higher
+- **Dart SDK**: 3.6.1 or higher  
 - **Git**: Latest version
 - **IDE**: Android Studio, VS Code, or IntelliJ IDEA
+- **Node.js**: For build tools (optional)
 
 ### Platform-Specific Requirements
 
@@ -28,7 +29,7 @@ This guide will help you set up the development environment and contribute to th
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/your-username/okumanya.git
+git clone https://github.com/erenkara1907/okumanya.git
 cd okumanya
 ```
 
@@ -55,6 +56,8 @@ cp .env.example .env
 # Edit .env with your configuration
 # API_BASE_URL=https://api.okumanya.com
 # API_TIMEOUT=30000
+# ENABLE_ANALYTICS=true
+# ENABLE_PERFORMANCE_MONITORING=true
 ```
 
 ### 5. Run the Application
@@ -74,16 +77,16 @@ flutter run -d <device-id>
 ```
 lib/
 ├── core/                    # Core functionality and utilities
-│   ├── analytics/          # Custom analytics service
+│   ├── analytics/          # Custom analytics service (Firebase-free)
 │   ├── cache/              # Caching mechanisms (Hive)
 │   ├── constants/          # Application constants
-│   ├── di/                 # Dependency injection setup
+│   ├── di/                 # Dependency injection setup (Injectable/GetIt)
 │   ├── error/              # Error handling and failures
 │   ├── localization/       # Internationalization support
-│   ├── network/            # Network utilities and info
+│   ├── network/            # Network utilities and connectivity
 │   ├── performance/        # Performance monitoring tools
 │   ├── repository/         # Base repository pattern
-│   ├── theme/              # Theme management
+│   ├── theme/              # Theme management (Material Design 3.0)
 │   ├── usecase/           # Base use case pattern
 │   └── widgets/           # Reusable UI components
 ├── features/               # Feature-based modules
@@ -106,12 +109,12 @@ lib/
 │   └── splash/            # Splash screen
 ├── shared/                # Shared utilities
 │   ├── config/           # App configuration
-│   ├── di/               # Service locator
+│   ├── di/               # Service locator (GetIt)
 │   ├── error/            # Global error handling
 │   ├── navigation/       # Auto Route navigation
 │   ├── network/          # Dio network layer
 │   ├── resources/        # Colors, themes, constants
-│   └── storage/          # Secure storage utilities
+│   └── storage/          # Secure storage utilities (FlutterSecureStorage)
 └── main.dart             # Application entry point
 ```
 
@@ -462,7 +465,7 @@ flutter pub get
 
 ### Getting Help
 - Check [Flutter documentation](https://docs.flutter.dev/)
-- Search existing [GitHub issues](https://github.com/your-username/okumanya/issues)
+- Search existing [GitHub issues](https://github.com/erenkara1907/okumanya/issues)
 - Create new issue with:
   - Flutter version (`flutter --version`)
   - Platform details

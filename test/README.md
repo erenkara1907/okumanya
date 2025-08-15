@@ -1,295 +1,589 @@
-# Okumanya Test Suite Documentation
+# 🧪 Testing Guide
 
-Bu dosya, Okumanya Flutter uygulaması için kapsamlı test suite'ini açıklar.
+## Overview
 
-## 📋 Test Yapısı Genel Bakış
+This guide covers the comprehensive testing strategy implemented in **Okumanya**, ensuring code quality, reliability, and maintainability through various testing approaches.
 
-Proje, Clean Architecture prensiplerine uygun olarak düzenlenmiş kapsamlı testlere sahiptir:
+## 📋 Table of Contents
+
+- [Testing Philosophy](#testing-philosophy)
+- [Test Structure](#test-structure)
+- [Testing Types](#testing-types)
+- [Test Coverage](#test-coverage)
+- [Running Tests](#running-tests)
+- [Writing Tests](#writing-tests)
+- [Testing Tools](#testing-tools)
+- [Best Practices](#best-practices)
+- [CI/CD Integration](#cicd-integration)
+
+## Testing Philosophy
+
+Okumanya follows a **test-driven development** approach with:
+
+- **Quality First**: Ensure all features work as expected
+- **Clean Architecture Testing**: Test each layer independently
+- **BLoC Testing**: Comprehensive state management testing
+- **User Experience**: Integration tests for real user scenarios
+- **Performance**: Test app performance and memory usage
+
+## Test Structure
 
 ```
 test/
-├── core/
-│   └── services/
-│       └── auth_service_test.dart
-├── features/
-│   ├── auth/
-│   │   ├── data/
-│   │   │   ├── datasources/
-│   │   │   │   └── auth_remote_data_source_test.dart
-│   │   │   └── repositories/
-│   │   │       └── auth_repository_test.dart (mevcut)
-│   │   ├── domain/
-│   │   │   └── usecases/
-│   │   │       └── login_usecase_test.dart
-│   │   └── presentation/
-│   │       ├── bloc/
-│   │       │   └── login_bloc_test.dart
-│   │       └── pages/
-│   │           └── login_page_test.dart
-│   ├── books/
-│   │   ├── data/ (mevcut testler)
-│   │   ├── domain/ (mevcut testler)
-│   │   └── presentation/ (mevcut testler)
-│   ├── home/
-│   │   └── presentation/
-│   │       └── bloc/
-│   │           ├── home_bloc_test.dart
-│   │           └── reading_bloc_test.dart
-│   └── profile/
-│       └── presentation/
-│           └── bloc/
-│               └── profile_bloc_test.dart
-├── integration_test/
-│   └── app_integration_test.dart
-├── unit/ (enhanced testler)
-└── widget_test.dart
+├── unit/                      # Unit tests for business logic
+│   ├── core/                 # Core functionality tests
+│   │   ├── analytics/        # Analytics service tests
+│   │   ├── cache/           # Cache manager tests
+│   │   ├── network/         # Network utilities tests
+│   │   └── performance/     # Performance monitoring tests
+│   └── features/            # Feature-specific unit tests
+│       ├── auth/
+│       │   ├── data/        # Data layer tests
+│       │   ├── domain/      # Domain layer tests
+│       │   └── presentation/ # BLoC tests
+│       └── books/
+├── widget/                   # Widget tests for UI components
+│   ├── core/
+│   │   └── widgets/         # Reusable widget tests
+│   └── features/
+│       ├── auth/
+│       │   └── widgets/     # Feature widget tests
+│       └── books/
+├── integration_test/         # Integration tests
+│   ├── app_integration_test.dart
+│   ├── auth_flow_test.dart
+│   └── books_flow_test.dart
+├── golden/                   # Golden image tests
+│   ├── widgets/
+│   └── pages/
+├── mocks/                    # Mock objects and test helpers
+│   ├── mock_services.dart
+│   ├── mock_repositories.dart
+│   └── test_data.dart
+└── test_helpers.dart         # Test utilities and helpers
 ```
 
-## 🧪 Test Türleri
+## Testing Types
 
-### 1. Unit Tests
-**Konum:** `test/features/*/domain/usecases/`, `test/core/services/`
+### 🔬 Unit Tests
 
-- **Login UseCase Test:** Giriş iş mantığını test eder
-- **Auth Service Test:** Authentication servis işlevlerini test eder
-- Tüm use case'lerin doğru çalışmasını doğrular
-- Error handling ve edge case'leri kapsar
+Test individual units of code in isolation:
 
-### 2. BLoC Tests
-**Konum:** `test/features/*/presentation/bloc/`
-
-#### LoginBloc Tests (`login_bloc_test.dart`)
-- ✅ Başarılı login senaryosu
-- ✅ Network hatası durumu
-- ✅ Authentication hatası durumu
-- ✅ Storage hatası durumu
-- ✅ Password visibility toggle
-- ✅ Multiple login attempts
-- ✅ Edge cases ve error handling
-
-#### HomeBloc Tests (`home_bloc_test.dart`)
-- ✅ Home data loading
-- ✅ Data refresh işlemleri
-- ✅ Weekly goal güncelleme
-- ✅ Performance testleri
-- ✅ Concurrent operations
-
-#### ReadingBloc Tests (`reading_bloc_test.dart`)
-- ✅ Reading modal açma/kapama
-- ✅ Sayfa navigasyonu (next/previous/goto)
-- ✅ Large dataset handling
-- ✅ Rapid navigation testleri
-- ✅ Edge cases
-
-#### ProfileBloc Tests (`profile_bloc_test.dart`)
-- ✅ Profile loading ve güncelleme
-- ✅ Statistics loading
-- ✅ Combined operations
-- ✅ Performance optimizations
-- ✅ Error handling
-
-### 3. Data Layer Tests
-**Konum:** `test/features/*/data/`
-
-#### AuthRemoteDataSource Tests (`auth_remote_data_source_test.dart`)
-- ✅ HTTP POST request testleri
-- ✅ Success response handling (200)
-- ✅ Authentication errors (401)
-- ✅ Not found errors (404)
-- ✅ Server errors (500)
-- ✅ Network connectivity issues
-- ✅ Timeout scenarios
-- ✅ JSON parsing errors
-- ✅ Special characters ve unicode support
-- ✅ Large response payloads
-- ✅ Malformed responses
-
-### 4. Widget Tests
-**Konum:** `test/features/*/presentation/pages/`
-
-#### LoginPage Tests (`login_page_test.dart`)
-- ✅ UI element görünürlüğü
-- ✅ Form validation
-- ✅ Password visibility toggle
-- ✅ Loading states
-- ✅ Success/error handling
-- ✅ Text input işlemleri
-- ✅ Accessibility features
-- ✅ Performance testleri
-- ✅ Edge cases
-
-### 5. Integration Tests
-**Konum:** `test/integration_test/`
-
-#### App Integration Tests (`app_integration_test.dart`)
-- ✅ Complete app flow
-- ✅ Login flow end-to-end
-- ✅ Password visibility integration
-- ✅ App launch performance
-- ✅ Device rotation handling
-- ✅ Memory stress tests
-- ✅ Network connectivity simulation
-- ✅ Accessibility features
-- ✅ Localization support
-- ✅ State persistence
-- ✅ Error handling scenarios
-
-## 🚀 Test Çalıştırma
-
-### Tüm Unit ve Widget Testleri
-```bash
-flutter test
-```
-
-### Specific Test Dosyası
-```bash
-flutter test test/features/auth/presentation/bloc/login_bloc_test.dart
-```
-
-### Integration Testleri
-```bash
-flutter test integration_test/app_integration_test.dart
-```
-
-### Test Coverage
-```bash
-flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
-```
-
-## 🎯 Test Coverage Hedefleri
-
-- **Unit Tests:** >95% code coverage
-- **BLoC Tests:** 100% state ve event coverage
-- **Widget Tests:** Tüm user interactions
-- **Integration Tests:** Critical user journeys
-
-## 📊 Test Metrikleri
-
-### Performans Benchmarks
-- **App Launch:** <10 seconds
-- **Login Process:** <5 seconds
-- **Widget Render:** <100ms
-- **BLoC Operations:** <50ms
-- **Data Operations:** <500ms
-
-### Reliability Metrics
-- **Test Success Rate:** >99%
-- **Flaky Test Rate:** <1%
-- **Test Execution Time:** <2 minutes (tüm testler)
-
-## 🔧 Mock ve Test Utilities
-
-### Mock Objects
-- `MockLoginUseCase` - Login business logic mocking
-- `MockAuthService` - Authentication service mocking
-- `MockDio` - Network requests mocking
-- `MockSecureStorageService` - Storage operations mocking
-
-### Test Helpers
-- **BLoC Test Setup:** Common BLoC test configurations
-- **Widget Test Helpers:** Reusable widget test utilities
-- **Integration Test Utils:** End-to-end test helpers
-
-## 📝 Test Yazma Rehberi
-
-### Unit Test Örneği
 ```dart
-group('LoginUseCase', () {
-  test('should return LoginEntity when repository call is successful', () async {
+// Example: Testing a use case
+group('GetBooks UseCase', () {
+  late GetBooks useCase;
+  late MockBooksRepository mockRepository;
+
+  setUp(() {
+    mockRepository = MockBooksRepository();
+    useCase = GetBooks(mockRepository);
+  });
+
+  test('should return books when repository call is successful', () async {
     // arrange
-    when(mockAuthRepository.login(tEmail, tPassword))
-        .thenAnswer((_) async => Right(tLoginEntity));
+    final testBooks = [
+      Book(id: '1', title: 'Test Book', author: 'Test Author'),
+    ];
+    when(mockRepository.getBooks()).thenAnswer((_) async => Right(testBooks));
 
     // act
-    final result = await useCase(tParams);
+    final result = await useCase(NoParams());
 
     // assert
-    expect(result, Right(tLoginEntity));
-    verify(mockAuthRepository.login(tEmail, tPassword));
+    expect(result, Right(testBooks));
+    verify(mockRepository.getBooks());
+    verifyNoMoreInteractions(mockRepository);
+  });
+
+  test('should return failure when repository throws exception', () async {
+    // arrange
+    when(mockRepository.getBooks()).thenAnswer(
+      (_) async => const Left(NetworkFailure()),
+    );
+
+    // act
+    final result = await useCase(NoParams());
+
+    // assert
+    expect(result, const Left(NetworkFailure()));
   });
 });
 ```
 
-### BLoC Test Örneği
+### 🎯 BLoC Tests
+
+Test state management with bloc_test:
+
 ```dart
-blocTest<LoginBloc, LoginState>(
-  'emits [loading, success] when login is successful',
-  build: () => loginBloc,
-  act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
+// Example: Testing BLoC
+blocTest<BooksBloc, BooksState>(
+  'emits [loading, loaded] when books are loaded successfully',
+  build: () => BooksBloc(
+    getBooks: mockGetBooks,
+    searchBooks: mockSearchBooks,
+  ),
+  act: (bloc) => bloc.add(const LoadBooks()),
+  setUp: () {
+    when(mockGetBooks(NoParams())).thenAnswer(
+      (_) async => Right(testBooks),
+    );
+  },
   expect: () => [
-    LoginState().copyWith(status: LoginStatus.loading),
-    LoginState().copyWith(status: LoginStatus.success, loginEntity: tLoginEntity),
+    const BooksState.loading(),
+    BooksState.loaded(testBooks),
+  ],
+  verify: (_) {
+    verify(mockGetBooks(NoParams()));
+  },
+);
+
+blocTest<BooksBloc, BooksState>(
+  'emits [loading, error] when books loading fails',
+  build: () => BooksBloc(
+    getBooks: mockGetBooks,
+    searchBooks: mockSearchBooks,
+  ),
+  act: (bloc) => bloc.add(const LoadBooks()),
+  setUp: () {
+    when(mockGetBooks(NoParams())).thenAnswer(
+      (_) async => const Left(NetworkFailure()),
+    );
+  },
+  expect: () => [
+    const BooksState.loading(),
+    const BooksState.error('Network connection failed'),
   ],
 );
 ```
 
-### Widget Test Örneği
+### 📱 Widget Tests
+
+Test UI components and their behavior:
+
 ```dart
-testWidgets('should display all required UI elements', (tester) async {
+// Example: Testing a widget
+testWidgets('BookCard displays book information correctly', (tester) async {
   // arrange
-  await tester.pumpWidget(createWidgetUnderTest());
+  const testBook = Book(
+    id: '1',
+    title: 'Test Book',
+    author: 'Test Author',
+  );
+
+  // act
+  await tester.pumpWidget(
+    MaterialApp(
+      home: BookCard(book: testBook),
+    ),
+  );
 
   // assert
-  expect(find.byType(CommonTextField), findsNWidgets(2));
-  expect(find.text('Giriş Yap'), findsOneWidget);
+  expect(find.text('Test Book'), findsOneWidget);
+  expect(find.text('Test Author'), findsOneWidget);
+  expect(find.byType(Card), findsOneWidget);
+});
+
+testWidgets('BookCard calls onTap when tapped', (tester) async {
+  // arrange
+  bool wasTapped = false;
+  const testBook = Book(id: '1', title: 'Test Book');
+
+  // act
+  await tester.pumpWidget(
+    MaterialApp(
+      home: BookCard(
+        book: testBook,
+        onTap: () => wasTapped = true,
+      ),
+    ),
+  );
+
+  await tester.tap(find.byType(BookCard));
+
+  // assert
+  expect(wasTapped, isTrue);
 });
 ```
 
-## 🐛 Test Debugging
+### 🔗 Integration Tests
 
-### Test Failure Debugging
-1. **Verbose Output:** `flutter test --verbose`
-2. **Specific Test:** Tek test çalıştırma
-3. **Debug Mode:** IDE debugger kullanımı
-4. **Print Statements:** Test içinde debug çıktıları
+Test complete user flows:
 
-### Common Issues
-- **State Management:** BLoC state transitions
-- **Async Operations:** Future/Stream handling
-- **Widget Tree:** Widget hierarchy issues
-- **Mock Setup:** Incorrect mock configurations
+```dart
+// Example: Integration test
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:okumanya/main.dart' as app;
 
-## 📈 Continuous Integration
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-### CI/CD Pipeline
-```yaml
-# Test stage example
-test:
-  stage: test
-  script:
-    - flutter test --coverage
-    - flutter test integration_test/
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage/lcov.info
+  group('App Integration Tests', () {
+    testWidgets('complete book search flow', (tester) async {
+      // Start app
+      app.main();
+      await tester.pumpAndSettle();
+
+      // Navigate to search
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pumpAndSettle();
+
+      // Enter search query
+      await tester.enterText(find.byType(TextField), 'flutter');
+      await tester.testTextInput.receiveAction(TextInputAction.search);
+      await tester.pumpAndSettle();
+
+      // Verify results
+      expect(find.text('Search Results'), findsOneWidget);
+      expect(find.byType(BookCard), findsWidgets);
+    });
+  });
+}
 ```
 
-## 🔮 Gelecek İyileştirmeler
+### 🎨 Golden Tests
 
-### Planlanan Test Geliştirmeleri
-- **Golden Tests:** UI consistency testleri
-- **Performance Profiling:** Detaylı performance analysis
-- **Visual Regression Tests:** UI değişiklik tespiti
-- **A11y Tests:** Enhanced accessibility testing
-- **Load Tests:** High-volume data handling
-- **Security Tests:** Authentication ve authorization
+Test UI appearance with golden images:
 
-### Test Automation
-- **Scheduled Tests:** Otomatik günlük test çalıştırma
-- **Regression Suite:** Release öncesi kapsamlı testler
-- **Device Farm Integration:** Multiple device testing
-- **Snapshot Testing:** State snapshot comparisons
+```dart
+// Example: Golden test
+testWidgets('BookCard golden test', (tester) async {
+  await tester.pumpWidget(
+    MaterialApp(
+      home: BookCard(
+        book: Book(
+          id: '1',
+          title: 'Sample Book',
+          author: 'Sample Author',
+        ),
+      ),
+    ),
+  );
 
-## 📚 Referanslar
+  await expectLater(
+    find.byType(BookCard),
+    matchesGoldenFile('golden/book_card.png'),
+  );
+});
+```
 
-- [Flutter Testing Documentation](https://docs.flutter.dev/testing)
-- [BLoC Testing Guide](https://bloclibrary.dev/#/testing)
-- [Mockito Documentation](https://pub.dev/packages/mockito)
-- [Integration Testing](https://docs.flutter.dev/testing/integration-tests)
+## Test Coverage
+
+### Coverage Goals
+
+- **Overall**: >80% line coverage
+- **Business Logic**: >90% coverage
+- **Critical Paths**: 100% coverage
+- **UI Components**: >70% coverage
+
+### Generating Coverage Reports
+
+```bash
+# Generate coverage
+flutter test --coverage
+
+# Generate HTML report (requires lcov)
+genhtml coverage/lcov.info -o coverage/html
+
+# Open report
+open coverage/html/index.html
+```
+
+### Coverage Analysis
+
+```bash
+# Check coverage percentage
+lcov --summary coverage/lcov.info
+
+# Find uncovered lines
+lcov --list coverage/lcov.info | grep -E "^[^|]*\|[^|]*\|[^1]"
+```
+
+## Running Tests
+
+### Test Scripts
+
+Use the provided test script for comprehensive testing:
+
+```bash
+# Run all tests with coverage
+./scripts/run_tests.sh all
+
+# Run specific test types
+./scripts/run_tests.sh unit
+./scripts/run_tests.sh widget
+./scripts/run_tests.sh integration
+./scripts/run_tests.sh golden
+
+# Update golden files
+./scripts/run_tests.sh golden --update-goldens
+```
+
+### Manual Test Commands
+
+```bash
+# Unit tests
+flutter test test/unit/
+
+# Widget tests
+flutter test test/widget/
+
+# Integration tests
+flutter test integration_test/
+
+# Specific test file
+flutter test test/unit/features/books/domain/usecases/get_books_test.dart
+
+# Run with coverage
+flutter test --coverage
+
+# Watch mode (reruns on file changes)
+flutter test --watch
+```
+
+## Writing Tests
+
+### Test Naming Convention
+
+```dart
+// Use descriptive test names
+test('should return books when repository call is successful', () {});
+test('should throw NetworkException when no internet connection', () {});
+test('should cache books locally after successful fetch', () {});
+
+// Group related tests
+group('GetBooks UseCase', () {
+  group('when repository returns success', () {
+    // Happy path tests
+  });
+  
+  group('when repository returns failure', () {
+    // Error case tests
+  });
+});
+```
+
+### Mock Setup
+
+```dart
+// Create mocks
+@GenerateMocks([BooksRepository, NetworkInfo, CacheManager])
+void main() {
+  late MockBooksRepository mockRepository;
+  late MockNetworkInfo mockNetworkInfo;
+  
+  setUp(() {
+    mockRepository = MockBooksRepository();
+    mockNetworkInfo = MockNetworkInfo();
+  });
+}
+```
+
+### Test Data Setup
+
+```dart
+// Create test data helpers
+class TestData {
+  static const testBook = Book(
+    id: '1',
+    title: 'Test Book',
+    author: 'Test Author',
+    category: 'Fiction',
+    publishedDate: '2024-01-01',
+  );
+  
+  static final testBooks = [testBook];
+  
+  static const testUser = User(
+    id: '1',
+    name: 'Test User',
+    email: 'test@example.com',
+  );
+}
+```
+
+## Testing Tools
+
+### Core Testing Dependencies
+
+```yaml
+dev_dependencies:
+  # Core testing
+  flutter_test:
+    sdk: flutter
+  test: ^1.24.0
+  
+  # BLoC testing
+  bloc_test: ^9.1.4
+  
+  # Mocking
+  mockito: ^5.4.2
+  
+  # Integration testing
+  integration_test:
+    sdk: flutter
+  
+  # UI testing
+  patrol: ^3.6.1
+  alchemist: ^0.9.0
+  
+  # Golden testing
+  golden_toolkit: ^0.15.0
+```
+
+### Test Utilities
+
+```dart
+// Test helpers
+class TestHelpers {
+  // Create test app wrapper
+  static Widget wrapWithApp(Widget child) {
+    return MaterialApp(
+      home: Scaffold(body: child),
+      theme: AppTheme.lightTheme,
+    );
+  }
+  
+  // Create BLoC provider wrapper
+  static Widget wrapWithBlocProvider<T extends BlocBase>(
+    T bloc,
+    Widget child,
+  ) {
+    return BlocProvider<T>(
+      create: (_) => bloc,
+      child: wrapWithApp(child),
+    );
+  }
+  
+  // Pump with localization
+  static Future<void> pumpWithLocalization(
+    WidgetTester tester,
+    Widget widget,
+  ) async {
+    await tester.pumpWidget(
+      EasyLocalization(
+        supportedLocales: const [Locale('en'), Locale('tr')],
+        path: 'assets/lang',
+        fallbackLocale: const Locale('en'),
+        child: wrapWithApp(widget),
+      ),
+    );
+  }
+}
+```
+
+## Best Practices
+
+### ✅ DO's
+
+- **Test Behavior, Not Implementation**: Test what the code does, not how
+- **Use Descriptive Names**: Make test intentions clear
+- **Arrange-Act-Assert**: Structure tests clearly
+- **Mock External Dependencies**: Keep tests isolated
+- **Test Edge Cases**: Cover error scenarios and boundary conditions
+- **Keep Tests Fast**: Avoid unnecessary delays
+- **One Assertion Per Test**: Focus on single behavior
+
+### ❌ DON'Ts
+
+- **Don't Test Private Methods**: Test public interface only
+- **Don't Use Real Network Calls**: Always mock external services
+- **Don't Ignore Test Failures**: Fix broken tests immediately
+- **Don't Copy-Paste Tests**: Create reusable test helpers
+- **Don't Skip Error Testing**: Test failure scenarios
+
+### Testing Checklist
+
+- [ ] All public methods tested
+- [ ] Error cases covered
+- [ ] Edge cases tested
+- [ ] Mocks properly configured
+- [ ] Tests are independent
+- [ ] Coverage meets requirements
+- [ ] Performance tests included
+- [ ] Integration flows tested
+
+## CI/CD Integration
+
+Tests are automatically run in GitHub Actions:
+
+### Automated Testing Pipeline
+
+1. **Unit Tests**: Run on every commit
+2. **Widget Tests**: Validate UI components
+3. **Integration Tests**: Test complete flows
+4. **Coverage Analysis**: Ensure coverage requirements
+5. **Performance Tests**: Monitor app performance
+
+### Test Reports
+
+- **Coverage**: Generated and uploaded to Codecov
+- **Test Results**: Displayed in GitHub Actions
+- **Performance**: Benchmarked and tracked over time
+
+### Quality Gates
+
+Tests must pass before:
+- **Merging PRs**: All tests green
+- **Deployment**: Integration tests pass
+- **Release**: Full test suite passes
+
+## Troubleshooting
+
+### Common Issues
+
+#### Test Failures
+```bash
+# Clear test cache
+flutter clean
+flutter pub get
+
+# Reset test database
+rm -rf test/.dart_tool
+```
+
+#### Coverage Issues
+```bash
+# Ensure coverage directory exists
+mkdir -p coverage
+
+# Check lcov installation
+which lcov
+```
+
+#### Integration Test Issues
+```bash
+# Check device/emulator
+flutter devices
+
+# Run with verbose logging
+flutter test integration_test/ -v
+```
+
+### Performance Testing
+
+```dart
+// Example: Performance test
+test('book loading performance', () async {
+  final stopwatch = Stopwatch()..start();
+  
+  final result = await getBooksUseCase(NoParams());
+  
+  stopwatch.stop();
+  
+  expect(stopwatch.elapsedMilliseconds, lessThan(1000));
+  expect(result.isRight(), true);
+});
+```
+
+## Resources
+
+- **[Flutter Testing Documentation](https://docs.flutter.dev/testing)**
+- **[BLoC Testing Guide](https://bloclibrary.dev/#/testing)**
+- **[Mockito Documentation](https://pub.dev/packages/mockito)**
+- **[Integration Testing](https://docs.flutter.dev/testing/integration-tests)**
 
 ---
 
-Bu test suite'i, Okumanya uygulamasının güvenilir, performanslı ve kullanıcı dostu olmasını sağlamak için tasarlanmıştır. Tüm testler düzenli olarak çalıştırılmalı ve yeni özellikler eklendiğinde ilgili testler de yazılmalıdır.
+Remember: **Good tests are as important as good code!** 🎯
