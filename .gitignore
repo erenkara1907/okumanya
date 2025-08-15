@@ -1,3 +1,15 @@
+# 🚫 Miscellaneous & OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# 🏗️ Build & Generated Files
+build/
 .dart_tool/
 .build/
 .flutter-plugins
@@ -5,15 +17,31 @@
 .packages
 .pub-cache/
 .pub/
+*.snap
+
+# 🔧 IDE & Editor Files
 .idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# 📱 Android Build Files
 android/.gradle/
-android/app/src/debug/
-android/app/src/profile/
-android/app/src/main/AndroidManifest.xml
+android/captures/
+android/key.properties
 android/local.properties
 android/gradle.properties
-android/settings.gradle
-android/captures/
+android/app/build/
+android/app/src/debug/
+android/app/src/profile/
+android/app/release/
+android/app/*.apk
+android/app/*.aab
+android/*.keystore
+
+# 🍎 iOS Build Files
 ios/Pods/
 ios/.generated/
 ios/.symlinks/
@@ -23,22 +51,126 @@ ios/Flutter/Generated.xcconfig
 ios/Flutter/Release.xcconfig
 ios/Flutter/Debug.xcconfig
 ios/Runner.xcworkspace/
+ios/Podfile.lock
+ios/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+ios/Runner.xcodeproj/xcuserdata/
+ios/Runner/GeneratedPluginRegistrant.*
+ios/derive_export_options.plist
+ios/*.ipa
+
+# 💻 macOS Build Files
 macos/Flutter/ephemeral/
+macos/Pods/
+macos/Podfile.lock
+macos/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+macos/Runner.xcodeproj/xcuserdata/
+
+# 🐧 Linux Build Files
+linux/flutter/ephemeral/
+
+# 🪟 Windows Build Files
 windows/Flutter/ephemeral/
+
+# 🌐 Web Build Files
 web/.dart_tool/
 web/.packages
 
-.vscode/
-
-.idea/
-
-*.iml
-*.log
-*.swp
-*.lock
-*.tmp
-
+# 📦 Dependencies
 pubspec.lock
+.pub/
 
-# Environment variables
+# 🧪 Test Files & Coverage
+test/.dart_tool/
+coverage/
+test_coverage/
+*.lcov
+
+# 📝 Log Files
+*.log
+*.tmp
+*.temp
+logs/
+
+# 🔐 Environment & Security Files
 .env
+.env.local
+.env.production
+.env.staging
+*.pem
+*.p12
+*.mobileprovision
+google-services.json
+GoogleService-Info.plist
+firebase_options.dart
+
+# 🚀 Deployment Files
+deployment/
+dist/
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# 📊 Analytics & Crash Reports
+crashlytics-build.properties
+app-release.apk
+app-debug.apk
+*.dSYM.zip
+*.dSYM
+
+# 🔄 Version Control
+.git/
+.gitattributes.local
+
+# 🗂️ Archive & Backup Files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+backup/
+archive/
+
+# 📈 Performance & Profiling
+*.trace
+*.prof
+profile.json
+
+# 🛠️ Build Tools
+.flutter-devtools/
+.fvm/
+
+# 🧩 Generated Code (can be regenerated)
+*.g.dart
+*.freezed.dart
+*.config.dart
+*.gr.dart
+*.chopper.dart
+*.mocks.dart
+
+# 📚 Documentation Build Files
+doc/api/
+
+# 🎯 Platform Specific Ignores
+# Add any platform-specific files that should not be committed
+
+# 🏪 Store Assets (large files)
+# Uncomment if you have large store assets that shouldn't be in git
+# store_assets/
+# screenshots_store/
+# app_icons_source/
+
+# 🎨 Design Files (large PSD, Sketch files)
+# Uncomment if you have large design files
+# design/
+# *.psd
+# *.sketch
+# *.xd
+# *.ai
+
+# 🎵 Media Files (if you have large media files)
+# Uncomment if you have large media files that are not essential
+# *.mp4
+# *.mov
+# *.avi
+# *.mp3
+# *.wav

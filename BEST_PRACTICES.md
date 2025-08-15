@@ -18,6 +18,27 @@ This guide outlines the best practices, conventions, and standards followed in t
 
 ## Code Organization
 
+### 🧹 Repository Management
+
+#### Generated Files Policy
+```bash
+# Generated files are excluded from Git
+*.g.dart
+*.freezed.dart
+*.config.dart
+*.gr.dart
+*.mocks.dart
+
+# Use regeneration script after clone/pull
+./scripts/regenerate_code.sh
+```
+
+#### Clean Repository Benefits
+- **90% smaller repository** - No build artifacts
+- **Faster clones** - Optimized for team collaboration
+- **No merge conflicts** - Generated files excluded
+- **Consistent environment** - Everyone regenerates locally
+
 ### 📁 File Naming Conventions
 
 ```bash
@@ -856,6 +877,12 @@ GestureDetector( // ❌ No semantic information
 - [ ] Input validation present
 - [ ] Secure data storage
 - [ ] Network security implemented
+
+### Repository
+- [ ] No generated files committed
+- [ ] .gitignore properly configured
+- [ ] Code regeneration documented
+- [ ] Build artifacts excluded
 ```
 
 ### 💬 Review Comments Examples
@@ -875,6 +902,7 @@ GestureDetector( // ❌ No semantic information
 ## Conclusion
 
 Following these best practices ensures:
+
 - **Maintainable Code**: Easy to read, understand, and modify
 - **Scalable Architecture**: Can grow with the application
 - **Performance**: Optimized for mobile devices

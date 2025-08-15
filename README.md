@@ -109,6 +109,10 @@ lib/
 
 3. **Generate code**
    ```bash
+   # Use the convenient script for code generation
+   ./scripts/regenerate_code.sh
+   
+   # Or manually:
    dart run build_runner build --delete-conflicting-outputs
    ```
 
@@ -128,6 +132,9 @@ lib/
 ### Development Scripts
 
 ```bash
+# Generate code (auto-generated files)
+./scripts/regenerate_code.sh
+
 # Run tests with coverage
 ./scripts/run_tests.sh all
 
@@ -154,8 +161,11 @@ dart format .
 # Analyze code
 flutter analyze
 
-# Generate code
+# Generate code (manual)
 dart run build_runner build --delete-conflicting-outputs
+
+# Clean and regenerate (recommended)
+./scripts/regenerate_code.sh
 ```
 
 ## 🧪 Testing
@@ -289,6 +299,13 @@ CACHE_ENABLED=true
 - **Android**: Configured in `android/app/build.gradle`
 - **iOS**: Configured in `ios/Runner.xcodeproj`
 - **Build scripts**: Available in `scripts/` directory
+- **Code generation**: `./scripts/regenerate_code.sh` for auto-generated files
+
+### Repository Management
+
+- **Clean .gitignore**: Excludes build artifacts, generated code, and OS files
+- **Optimized size**: ~90% smaller repository without build files
+- **Generated files**: Auto-regenerated with `./scripts/regenerate_code.sh`
 
 ## 📈 Performance
 

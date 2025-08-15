@@ -44,7 +44,10 @@ cd ios && pod install && cd ..
 
 ### 3. Code Generation
 ```bash
-# Generate code for models, routes, and DI
+# Use the convenient script (recommended)
+./scripts/regenerate_code.sh
+
+# Or manually generate code for models, routes, and DI
 dart run build_runner build --delete-conflicting-outputs
 ```
 
@@ -147,13 +150,16 @@ test(books): add unit tests for book repository
 
 ### Code Generation
 ```bash
-# Generate all code
+# Generate all code (recommended)
+./scripts/regenerate_code.sh
+
+# Manual generation
 dart run build_runner build --delete-conflicting-outputs
 
 # Watch for changes (during development)
 dart run build_runner watch
 
-# Clean and regenerate
+# Clean and regenerate manually
 dart run build_runner clean
 dart run build_runner build --delete-conflicting-outputs
 ```
@@ -471,6 +477,11 @@ flutter pub get
   - Platform details
   - Steps to reproduce
   - Error logs
+
+### Repository Management
+- **Generated Files**: Auto-excluded from Git via `.gitignore`
+- **Code Regeneration**: Use `./scripts/regenerate_code.sh` after clone
+- **Clean Repository**: ~90% smaller without build artifacts
 
 ## 📊 CI/CD Integration
 
