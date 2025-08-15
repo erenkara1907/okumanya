@@ -29,7 +29,8 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin, ProfilePageMixin {
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin, ProfilePageMixin {
   @override
   void initState() {
     super.initState();
@@ -48,7 +49,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       DateTime.now().subtract(const Duration(days: 5)),
     ];
 
-    final thisWeekDays = DateUtilsHelper.getThisWeekReadingDays(mockReadingDates);
+    final thisWeekDays =
+        DateUtilsHelper.getThisWeekReadingDays(mockReadingDates);
     return '${thisWeekDays.length} gün';
   }
 
@@ -98,7 +100,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => const ProfileEditForm(),
+                                    builder: (context) =>
+                                        const ProfileEditForm(),
                                   ),
                                 );
                               },
