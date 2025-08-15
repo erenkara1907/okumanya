@@ -41,7 +41,8 @@ void main() {
       user: tUserModel,
     );
 
-    test('should return LoginEntity when repository call is successful', () async {
+    test('should return LoginEntity when repository call is successful',
+        () async {
       // arrange
       when(mockAuthRepository.login(tEmail, tPassword))
           .thenAnswer((_) async => Right(tLoginEntity));
@@ -55,10 +56,11 @@ void main() {
       verifyNoMoreInteractions(mockAuthRepository);
     });
 
-    test('should return NetworkFailure when there is no internet connection', () async {
+    test('should return NetworkFailure when there is no internet connection',
+        () async {
       // arrange
-      when(mockAuthRepository.login(tEmail, tPassword))
-          .thenAnswer((_) async => Left(NetworkFailure(message: 'No internet connection')));
+      when(mockAuthRepository.login(tEmail, tPassword)).thenAnswer(
+          (_) async => Left(NetworkFailure(message: 'No internet connection')));
 
       // act
       final result = await useCase(tParams);
@@ -71,8 +73,8 @@ void main() {
 
     test('should return AuthFailure when credentials are invalid', () async {
       // arrange
-      when(mockAuthRepository.login(tEmail, tPassword))
-          .thenAnswer((_) async => Left(AuthFailure(message: 'Invalid credentials')));
+      when(mockAuthRepository.login(tEmail, tPassword)).thenAnswer(
+          (_) async => Left(AuthFailure(message: 'Invalid credentials')));
 
       // act
       final result = await useCase(tParams);
@@ -85,23 +87,27 @@ void main() {
 
     test('should return ServerFailure when server returns error', () async {
       // arrange
-      when(mockAuthRepository.login(tEmail, tPassword))
-          .thenAnswer((_) async => Left(ServerFailure(message: 'Server error', statusCode: 500)));
+      when(mockAuthRepository.login(tEmail, tPassword)).thenAnswer((_) async =>
+          Left(ServerFailure(message: 'Server error', statusCode: 500)));
 
       // act
       final result = await useCase(tParams);
 
       // assert
-      expect(result, Left(ServerFailure(message: 'Server error', statusCode: 500)));
+      expect(result,
+          Left(ServerFailure(message: 'Server error', statusCode: 500)));
       verify(mockAuthRepository.login(tEmail, tPassword));
       verifyNoMoreInteractions(mockAuthRepository);
     });
 
-    test('should return ValidationFailure when email format is invalid', () async {
+    test('should return ValidationFailure when email format is invalid',
+        () async {
       // arrange
-      const invalidParams = LoginParams(email: 'invalid-email', password: tPassword);
-      when(mockAuthRepository.login('invalid-email', tPassword))
-          .thenAnswer((_) async => Left(ValidationFailure(message: 'Invalid email format')));
+      const invalidParams =
+          LoginParams(email: 'invalid-email', password: tPassword);
+      when(mockAuthRepository.login('invalid-email', tPassword)).thenAnswer(
+          (_) async =>
+              Left(ValidationFailure(message: 'Invalid email format')));
 
       // act
       final result = await useCase(invalidParams);
@@ -112,11 +118,12 @@ void main() {
       verifyNoMoreInteractions(mockAuthRepository);
     });
 
-    test('should return ValidationFailure when password is too short', () async {
+    test('should return ValidationFailure when password is too short',
+        () async {
       // arrange
       const shortPasswordParams = LoginParams(email: tEmail, password: '123');
-      when(mockAuthRepository.login(tEmail, '123'))
-          .thenAnswer((_) async => Left(ValidationFailure(message: 'Password too short')));
+      when(mockAuthRepository.login(tEmail, '123')).thenAnswer(
+          (_) async => Left(ValidationFailure(message: 'Password too short')));
 
       // act
       final result = await useCase(shortPasswordParams);
@@ -129,8 +136,8 @@ void main() {
 
     test('should return NotFoundFailure when user does not exist', () async {
       // arrange
-      when(mockAuthRepository.login(tEmail, tPassword))
-          .thenAnswer((_) async => Left(NotFoundFailure(message: 'User not found')));
+      when(mockAuthRepository.login(tEmail, tPassword)).thenAnswer(
+          (_) async => Left(NotFoundFailure(message: 'User not found')));
 
       // act
       final result = await useCase(tParams);
@@ -192,7 +199,8 @@ void main() {
         // arrange
         const params1 = LoginParams(email: tEmail, password: tPassword);
         const params2 = LoginParams(email: tEmail, password: tPassword);
-        const params3 = LoginParams(email: 'different@email.com', password: tPassword);
+        const params3 =
+            LoginParams(email: 'different@email.com', password: tPassword);
 
         // assert
         expect(params1, equals(params2));
@@ -228,7 +236,8 @@ void main() {
         const specialPassword = 'P@ssw0rd!#\$%^&*()_+{}[]|\\:";\'<>?,./`~';
 
         // act
-        const params = LoginParams(email: specialEmail, password: specialPassword);
+        const params =
+            LoginParams(email: specialEmail, password: specialPassword);
 
         // assert
         expect(params.email, specialEmail);
@@ -239,23 +248,25 @@ void main() {
     group('Edge Cases', () {
       test('should handle very long email addresses', () async {
         // arrange
-        const longEmail = 'very.long.email.address.that.might.cause.issues@very.long.domain.name.example.com';
-        const longEmailParams = LoginParams(email: longEmail, password: tPassword);
-        
+        const longEmail =
+            'very.long.email.address.that.might.cause.issues@very.long.domain.name.example.com';
+        const longEmailParams =
+            LoginParams(email: longEmail, password: tPassword);
+
         when(mockAuthRepository.login(longEmail, tPassword))
             .thenAnswer((_) async => Right(LoginEntity(
-              token: tLoginEntity.token,
-              isTeacher: tLoginEntity.isTeacher,
-              user: UserModel(
-                id: tUserModel.id,
-                name: tUserModel.name,
-                email: longEmail,
-                userLevel: tUserModel.userLevel,
-                userRole: tUserModel.userRole,
-                createdAt: tUserModel.createdAt,
-                updatedAt: tUserModel.updatedAt,
-              ),
-            )));
+                  token: tLoginEntity.token,
+                  isTeacher: tLoginEntity.isTeacher,
+                  user: UserModel(
+                    id: tUserModel.id,
+                    name: tUserModel.name,
+                    email: longEmail,
+                    userLevel: tUserModel.userLevel,
+                    userRole: tUserModel.userRole,
+                    createdAt: tUserModel.createdAt,
+                    updatedAt: tUserModel.updatedAt,
+                  ),
+                )));
 
         // act
         final result = await useCase(longEmailParams);
@@ -268,9 +279,11 @@ void main() {
 
       test('should handle very long passwords', () async {
         // arrange
-        final longPassword = 'VeryLongPasswordThatExceedsNormalExpectations' * 10;
-        final longPasswordParams = LoginParams(email: tEmail, password: longPassword);
-        
+        final longPassword =
+            'VeryLongPasswordThatExceedsNormalExpectations' * 10;
+        final longPasswordParams =
+            LoginParams(email: tEmail, password: longPassword);
+
         when(mockAuthRepository.login(tEmail, longPassword))
             .thenAnswer((_) async => Right(tLoginEntity));
 
@@ -286,22 +299,23 @@ void main() {
         // arrange
         const unicodeEmail = 'tëst@éxämplé.com';
         const unicodePassword = 'pässwörd123ñ';
-        const unicodeParams = LoginParams(email: unicodeEmail, password: unicodePassword);
-        
+        const unicodeParams =
+            LoginParams(email: unicodeEmail, password: unicodePassword);
+
         when(mockAuthRepository.login(unicodeEmail, unicodePassword))
             .thenAnswer((_) async => Right(LoginEntity(
-              token: tLoginEntity.token,
-              isTeacher: tLoginEntity.isTeacher,
-              user: UserModel(
-                id: tUserModel.id,
-                name: tUserModel.name,
-                email: unicodeEmail,
-                userLevel: tUserModel.userLevel,
-                userRole: tUserModel.userRole,
-                createdAt: tUserModel.createdAt,
-                updatedAt: tUserModel.updatedAt,
-              ),
-            )));
+                  token: tLoginEntity.token,
+                  isTeacher: tLoginEntity.isTeacher,
+                  user: UserModel(
+                    id: tUserModel.id,
+                    name: tUserModel.name,
+                    email: unicodeEmail,
+                    userLevel: tUserModel.userLevel,
+                    userRole: tUserModel.userRole,
+                    createdAt: tUserModel.createdAt,
+                    updatedAt: tUserModel.updatedAt,
+                  ),
+                )));
 
         // act
         final result = await useCase(unicodeParams);
@@ -313,10 +327,11 @@ void main() {
 
       test('should handle null-like string values', () async {
         // arrange
-        const nullLikeParams = LoginParams(email: 'null', password: 'undefined');
-        
-        when(mockAuthRepository.login('null', 'undefined'))
-            .thenAnswer((_) async => Left(AuthFailure(message: 'Invalid credentials')));
+        const nullLikeParams =
+            LoginParams(email: 'null', password: 'undefined');
+
+        when(mockAuthRepository.login('null', 'undefined')).thenAnswer(
+            (_) async => Left(AuthFailure(message: 'Invalid credentials')));
 
         // act
         final result = await useCase(nullLikeParams);
@@ -330,12 +345,11 @@ void main() {
     group('Performance Tests', () {
       test('should complete login request within reasonable time', () async {
         // arrange
-        when(mockAuthRepository.login(tEmail, tPassword))
-            .thenAnswer((_) async {
-              // Simulate network delay
-              await Future.delayed(const Duration(milliseconds: 100));
-              return Right(tLoginEntity);
-            });
+        when(mockAuthRepository.login(tEmail, tPassword)).thenAnswer((_) async {
+          // Simulate network delay
+          await Future.delayed(const Duration(milliseconds: 100));
+          return Right(tLoginEntity);
+        });
 
         // act
         final stopwatch = Stopwatch()..start();
@@ -344,14 +358,15 @@ void main() {
 
         // assert
         expect(result.isRight(), true);
-        expect(stopwatch.elapsedMilliseconds, lessThan(1000)); // Should complete within 1 second
+        expect(stopwatch.elapsedMilliseconds,
+            lessThan(1000)); // Should complete within 1 second
         verify(mockAuthRepository.login(tEmail, tPassword));
       });
 
       test('should handle timeout scenarios gracefully', () async {
         // arrange
-        when(mockAuthRepository.login(tEmail, tPassword))
-            .thenAnswer((_) async => Left(NetworkFailure(message: 'Request timeout')));
+        when(mockAuthRepository.login(tEmail, tPassword)).thenAnswer(
+            (_) async => Left(NetworkFailure(message: 'Request timeout')));
 
         // act
         final result = await useCase(tParams);
@@ -384,16 +399,19 @@ void main() {
         when(mockAuthRepository.login(tEmail, tPassword))
             .thenAnswer((_) async => Right(tLoginEntity));
         when(mockAuthRepository.login('invalid@email.com', tPassword))
-            .thenAnswer((_) async => Left(AuthFailure(message: 'Invalid credentials')));
+            .thenAnswer(
+                (_) async => Left(AuthFailure(message: 'Invalid credentials')));
 
         // act
         final validResult = await useCase(tParams);
-        const invalidParams = LoginParams(email: 'invalid@email.com', password: tPassword);
+        const invalidParams =
+            LoginParams(email: 'invalid@email.com', password: tPassword);
         final invalidResult = await useCase(invalidParams);
 
         // assert
         expect(validResult, Right(tLoginEntity));
-        expect(invalidResult, Left(AuthFailure(message: 'Invalid credentials')));
+        expect(
+            invalidResult, Left(AuthFailure(message: 'Invalid credentials')));
         verify(mockAuthRepository.login(tEmail, tPassword));
         verify(mockAuthRepository.login('invalid@email.com', tPassword));
       });
@@ -403,8 +421,8 @@ void main() {
       test('should preserve exact error messages from failures', () async {
         // arrange
         const customErrorMessage = 'Custom authentication error message';
-        when(mockAuthRepository.login(tEmail, tPassword))
-            .thenAnswer((_) async => Left(AuthFailure(message: customErrorMessage)));
+        when(mockAuthRepository.login(tEmail, tPassword)).thenAnswer(
+            (_) async => Left(AuthFailure(message: customErrorMessage)));
 
         // act
         final result = await useCase(tParams);
@@ -436,10 +454,12 @@ void main() {
           final result = await useCase(tParams);
 
           expect(result, Left(failure));
-          expect(result.fold((f) => f.runtimeType, (_) => null), failure.runtimeType);
+          expect(result.fold((f) => f.runtimeType, (_) => null),
+              failure.runtimeType);
         }
 
-        verify(mockAuthRepository.login(tEmail, tPassword)).called(failures.length);
+        verify(mockAuthRepository.login(tEmail, tPassword))
+            .called(failures.length);
       });
     });
   });

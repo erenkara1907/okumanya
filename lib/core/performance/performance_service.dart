@@ -16,7 +16,7 @@ class PerformanceService {
   /// Start measuring performance for an operation
   void startMeasurement(String operationName) {
     _startTimes[operationName] = DateTime.now();
-    
+
     if (kDebugMode) {
       developer.Timeline.startSync(operationName);
       print('⏱️ Started measuring: $operationName');
@@ -27,7 +27,7 @@ class PerformanceService {
   Future<Duration?> endMeasurement(String operationName) async {
     final endTime = DateTime.now();
     final startTime = _startTimes.remove(operationName);
-    
+
     if (startTime == null) {
       if (kDebugMode) {
         print('⚠️ No start time found for operation: $operationName');
@@ -36,7 +36,7 @@ class PerformanceService {
     }
 
     final duration = endTime.difference(startTime);
-    
+
     if (kDebugMode) {
       developer.Timeline.finishSync();
       print('✅ Completed $operationName in ${duration.inMilliseconds}ms');
@@ -44,10 +44,10 @@ class PerformanceService {
 
     // Track performance with analytics
     await _analytics.trackPerformance(operationName, duration);
-    
+
     // Store metric for analysis
     _addMetric(operationName, duration.inMilliseconds.toDouble());
-    
+
     return duration;
   }
 
@@ -57,7 +57,7 @@ class PerformanceService {
     Future<T> Function() operation,
   ) async {
     startMeasurement(operationName);
-    
+
     try {
       final result = await operation();
       await endMeasurement(operationName);
@@ -74,26 +74,26 @@ class PerformanceService {
     T Function() operation,
   ) {
     final startTime = DateTime.now();
-    
+
     if (kDebugMode) {
       developer.Timeline.startSync(operationName);
     }
-    
+
     try {
       final result = operation();
-      
+
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      
+
       if (kDebugMode) {
         developer.Timeline.finishSync();
         print('⚡ Sync operation $operationName: ${duration.inMilliseconds}ms');
       }
-      
+
       // Fire and forget analytics tracking
       _analytics.trackPerformance(operationName, duration);
       _addMetric(operationName, duration.inMilliseconds.toDouble());
-      
+
       return result;
     } catch (e) {
       if (kDebugMode) {
@@ -108,12 +108,12 @@ class PerformanceService {
     if (kDebugMode) {
       print('🎨 Widget $widgetName built in ${buildTime.inMicroseconds}μs');
     }
-    
+
     _analytics.trackEvent('widget_build_performance', parameters: {
       'widget_name': widgetName,
       'build_time_microseconds': buildTime.inMicroseconds,
     });
-    
+
     _addMetric('widget_build_$widgetName', buildTime.inMicroseconds.toDouble());
   }
 
@@ -121,7 +121,7 @@ class PerformanceService {
   Future<void> trackMemoryUsage(String context) async {
     if (kDebugMode) {
       print('🧠 Memory tracking: $context');
-      
+
       await _analytics.trackEvent('memory_usage', parameters: {
         'context': context,
       });
@@ -146,8 +146,9 @@ class PerformanceService {
       'response_size': responseSize,
     });
 
-    _addMetric('network_${method.toLowerCase()}', duration.inMilliseconds.toDouble());
-    
+    _addMetric(
+        'network_${method.toLowerCase()}', duration.inMilliseconds.toDouble());
+
     if (kDebugMode) {
       print('🌐 $method $url: ${duration.inMilliseconds}ms ($statusCode)');
     }
@@ -158,9 +159,9 @@ class PerformanceService {
     await _analytics.trackEvent('app_startup', parameters: {
       'startup_time_ms': startupTime.inMilliseconds,
     });
-    
+
     _addMetric('app_startup', startupTime.inMilliseconds.toDouble());
-    
+
     if (kDebugMode) {
       print('🚀 App started in ${startupTime.inMilliseconds}ms');
     }
@@ -168,17 +169,18 @@ class PerformanceService {
 
   /// Track frame rendering performance
   void trackFrameTime(Duration frameTime) {
-    if (frameTime.inMilliseconds > 16) { // > 16ms indicates dropped frame
+    if (frameTime.inMilliseconds > 16) {
+      // > 16ms indicates dropped frame
       _analytics.trackEvent('frame_performance', parameters: {
         'frame_time_ms': frameTime.inMilliseconds,
         'dropped_frame': true,
       });
-      
+
       if (kDebugMode) {
         print('🖼️ Dropped frame: ${frameTime.inMilliseconds}ms');
       }
     }
-    
+
     _addMetric('frame_time', frameTime.inMilliseconds.toDouble());
   }
 
@@ -193,7 +195,7 @@ class PerformanceService {
     final count = metrics.length;
     final sum = metrics.reduce((a, b) => a + b);
     final average = sum / count;
-    final median = count.isOdd 
+    final median = count.isOdd
         ? metrics[count ~/ 2]
         : (metrics[count ~/ 2 - 1] + metrics[count ~/ 2]) / 2;
     final min = metrics.first;
@@ -223,7 +225,7 @@ class PerformanceService {
   void resetMetrics() {
     _metrics.clear();
     _startTimes.clear();
-    
+
     if (kDebugMode) {
       print('📊 Performance metrics reset');
     }
@@ -232,14 +234,14 @@ class PerformanceService {
   /// Log performance summary to analytics
   Future<void> logPerformanceSummary() async {
     final stats = getAllStats();
-    
+
     for (final entry in stats.entries) {
       await _analytics.trackEvent('performance_summary', parameters: {
         'operation': entry.key,
         ...entry.value,
       });
     }
-    
+
     if (kDebugMode) {
       print('📈 Performance summary logged: ${stats.length} operations');
     }
@@ -247,7 +249,7 @@ class PerformanceService {
 
   void _addMetric(String operationName, double value) {
     _metrics.putIfAbsent(operationName, () => <double>[]).add(value);
-    
+
     // Keep only last 100 measurements to prevent memory leaks
     final list = _metrics[operationName]!;
     if (list.length > 100) {

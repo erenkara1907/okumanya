@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import '../error/failures.dart';
 
 /// Abstract base class for all use cases
-/// 
+///
 /// [T] - return type of the use case
 /// [P] - parameters required for the use case
 abstract class UseCase<T, P> {

@@ -185,11 +185,14 @@ void main() {
         'handles very long search queries',
         build: () => homeBloc,
         act: (bloc) => bloc.add(SearchBooks(
-          query: 'very long search query that might cause performance issues' * 100,
+          query: 'very long search query that might cause performance issues' *
+              100,
         )),
         expect: () => [
           HomeState().copyWith(
-            searchQuery: 'very long search query that might cause performance issues' * 100,
+            searchQuery:
+                'very long search query that might cause performance issues' *
+                    100,
           ),
         ],
       );

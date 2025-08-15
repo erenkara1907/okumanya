@@ -5,7 +5,8 @@ class AppConfig {
   static String get apiVersion => dotenv.env['API_VERSION'] ?? 'v1';
   static String get emailDomain => dotenv.env['EMAIL_DOMAIN'] ?? '';
   static String get environment => dotenv.env['ENVIRONMENT'] ?? 'development';
-  static int get apiTimeout => int.tryParse(dotenv.env['API_TIMEOUT'] ?? '30000') ?? 30000;
+  static int get apiTimeout =>
+      int.tryParse(dotenv.env['API_TIMEOUT'] ?? '30000') ?? 30000;
 
   static String get fullApiUrl => '$baseUrl/$apiVersion';
 

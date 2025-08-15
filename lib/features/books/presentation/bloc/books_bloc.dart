@@ -50,7 +50,8 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
   }
 
   /// Handles searching books
-  Future<void> _onSearchBooks(SearchBooks event, Emitter<BooksState> emit) async {
+  Future<void> _onSearchBooks(
+      SearchBooks event, Emitter<BooksState> emit) async {
     if (event.query.trim().isEmpty) {
       add(const BooksEvent.clearSearch());
       return;
@@ -62,7 +63,8 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
       isLoading: true,
     ));
 
-    final result = await _searchBooks(use_cases.SearchBooksParams(query: event.query));
+    final result =
+        await _searchBooks(use_cases.SearchBooksParams(query: event.query));
 
     result.fold(
       (failure) => emit(BooksState.error(
@@ -80,7 +82,8 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
   /// Handles filtering books by category
   void _onFilterByCategory(FilterByCategory event, Emitter<BooksState> emit) {
     state.maybeWhen(
-      loaded: (books, filteredBooks, categories, selectedCategory, searchQuery, isSearching) {
+      loaded: (books, filteredBooks, categories, selectedCategory, searchQuery,
+          isSearching) {
         final filtered = event.category.isEmpty || event.category == 'All'
             ? books
             : books.where((book) => book.category == event.category).toList();
@@ -130,10 +133,11 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
   }
 
   /// Handles refreshing books data
-  Future<void> _onRefreshBooks(RefreshBooks event, Emitter<BooksState> emit) async {
+  Future<void> _onRefreshBooks(
+      RefreshBooks event, Emitter<BooksState> emit) async {
     // Keep current category if available
     final currentCategory = state.currentSelectedCategory;
-    
+
     if (currentCategory.isNotEmpty && currentCategory != 'All') {
       add(BooksEvent.loadBooksByCategory(category: currentCategory));
     } else {
@@ -144,7 +148,8 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
   /// Handles clearing search
   void _onClearSearch(ClearSearch event, Emitter<BooksState> emit) {
     state.maybeWhen(
-      loaded: (books, filteredBooks, categories, selectedCategory, searchQuery, isSearching) {
+      loaded: (books, filteredBooks, categories, selectedCategory, searchQuery,
+          isSearching) {
         emit(BooksState.loaded(
           books: books,
           filteredBooks: filteredBooks,

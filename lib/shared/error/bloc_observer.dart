@@ -16,7 +16,8 @@ class AppBlocObserver extends BlocObserver {
   void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
     super.onEvent(bloc, event);
     if (AppConfig.isDevelopment) {
-      developer.log('onEvent -- ${bloc.runtimeType}, $event', name: 'BlocObserver');
+      developer.log('onEvent -- ${bloc.runtimeType}, $event',
+          name: 'BlocObserver');
     }
   }
 
@@ -24,7 +25,8 @@ class AppBlocObserver extends BlocObserver {
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
     if (AppConfig.isDevelopment) {
-      developer.log('onChange -- ${bloc.runtimeType}, $change', name: 'BlocObserver');
+      developer.log('onChange -- ${bloc.runtimeType}, $change',
+          name: 'BlocObserver');
     }
   }
 
@@ -32,14 +34,15 @@ class AppBlocObserver extends BlocObserver {
   void onTransition(Bloc<dynamic, dynamic> bloc, Transition transition) {
     super.onTransition(bloc, transition);
     if (AppConfig.isDevelopment) {
-      developer.log('onTransition -- ${bloc.runtimeType}, $transition', name: 'BlocObserver');
+      developer.log('onTransition -- ${bloc.runtimeType}, $transition',
+          name: 'BlocObserver');
     }
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
-    
+
     developer.log(
       'onError -- ${bloc.runtimeType}',
       name: 'BlocObserver',

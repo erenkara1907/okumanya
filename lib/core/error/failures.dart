@@ -6,7 +6,7 @@ abstract class Failure extends Equatable {
 
   /// Human-readable error message
   final String message;
-  
+
   /// Optional HTTP status code or error code
   final int? statusCode;
 

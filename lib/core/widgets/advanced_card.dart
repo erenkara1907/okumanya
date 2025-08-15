@@ -53,7 +53,7 @@ class _AdvancedCardState extends State<AdvancedCard>
       duration: widget.animationDuration,
       vsync: this,
     );
-    
+
     _elevationAnimation = Tween<double>(
       begin: widget.elevation,
       end: widget.hoverElevation,
@@ -82,7 +82,7 @@ class _AdvancedCardState extends State<AdvancedCard>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       margin: widget.margin,
       child: MouseRegion(
@@ -92,7 +92,9 @@ class _AdvancedCardState extends State<AdvancedCard>
           animation: _elevationAnimation,
           builder: (context, child) {
             return Material(
-              elevation: widget.isAnimated ? _elevationAnimation.value : widget.elevation,
+              elevation: widget.isAnimated
+                  ? _elevationAnimation.value
+                  : widget.elevation,
               shadowColor: widget.shadowColor ?? theme.shadowColor,
               borderRadius: BorderRadius.circular(widget.borderRadius),
               color: Colors.transparent,
@@ -112,7 +114,8 @@ class _AdvancedCardState extends State<AdvancedCard>
                       onLongPress: widget.onLongPress,
                       borderRadius: BorderRadius.circular(widget.borderRadius),
                       splashColor: theme.primaryColor.withValues(alpha: 0.1),
-                      highlightColor: theme.primaryColor.withValues(alpha: 0.05),
+                      highlightColor:
+                          theme.primaryColor.withValues(alpha: 0.05),
                       child: Container(
                         padding: widget.padding,
                         child: widget.child,

@@ -40,7 +40,8 @@ class PerformanceBenchmarks {
       }
 
       stopwatch.stop();
-      print('📋 List with $itemCount items build time: ${stopwatch.elapsedMilliseconds}ms');
+      print(
+          '📋 List with $itemCount items build time: ${stopwatch.elapsedMilliseconds}ms');
     }
   }
 
@@ -56,7 +57,8 @@ class PerformanceBenchmarks {
       stopwatch.stop();
 
       if (kDebugMode) {
-        print('🌐 Network call "$operationName": ${stopwatch.elapsedMilliseconds}ms');
+        print(
+            '🌐 Network call "$operationName": ${stopwatch.elapsedMilliseconds}ms');
       }
 
       return result;
@@ -64,7 +66,8 @@ class PerformanceBenchmarks {
       stopwatch.stop();
 
       if (kDebugMode) {
-        print('❌ Network call "$operationName" failed after ${stopwatch.elapsedMilliseconds}ms');
+        print(
+            '❌ Network call "$operationName" failed after ${stopwatch.elapsedMilliseconds}ms');
       }
 
       rethrow;
@@ -83,7 +86,8 @@ class PerformanceBenchmarks {
       stopwatch.stop();
 
       if (kDebugMode) {
-        print('💾 Database "$operationName": ${stopwatch.elapsedMilliseconds}ms');
+        print(
+            '💾 Database "$operationName": ${stopwatch.elapsedMilliseconds}ms');
       }
 
       return result;
@@ -91,7 +95,8 @@ class PerformanceBenchmarks {
       stopwatch.stop();
 
       if (kDebugMode) {
-        print('❌ Database "$operationName" failed after ${stopwatch.elapsedMilliseconds}ms');
+        print(
+            '❌ Database "$operationName" failed after ${stopwatch.elapsedMilliseconds}ms');
       }
 
       rethrow;
@@ -185,22 +190,26 @@ class MockBuildContext extends BuildContext {
   bool get debugDoingBuild => false;
 
   @override
-  InheritedWidget dependOnInheritedElement(InheritedElement? ancestor, {Object? aspect}) {
+  InheritedWidget dependOnInheritedElement(InheritedElement? ancestor,
+      {Object? aspect}) {
     throw UnimplementedError();
   }
 
   @override
-  T? dependOnInheritedWidgetOfExactType<T extends InheritedWidget>({Object? aspect}) {
+  T? dependOnInheritedWidgetOfExactType<T extends InheritedWidget>(
+      {Object? aspect}) {
     throw UnimplementedError();
   }
 
   @override
-  DiagnosticsNode describeElement(String name, {DiagnosticsTreeStyle style = DiagnosticsTreeStyle.errorProperty}) {
+  DiagnosticsNode describeElement(String name,
+      {DiagnosticsTreeStyle style = DiagnosticsTreeStyle.errorProperty}) {
     throw UnimplementedError();
   }
 
   @override
-  List<DiagnosticsNode> describeMissingAncestor({required Type expectedAncestorType}) {
+  List<DiagnosticsNode> describeMissingAncestor(
+      {required Type expectedAncestorType}) {
     throw UnimplementedError();
   }
 
@@ -210,7 +219,8 @@ class MockBuildContext extends BuildContext {
   }
 
   @override
-  DiagnosticsNode describeWidget(String name, {DiagnosticsTreeStyle style = DiagnosticsTreeStyle.errorProperty}) {
+  DiagnosticsNode describeWidget(String name,
+      {DiagnosticsTreeStyle style = DiagnosticsTreeStyle.errorProperty}) {
     throw UnimplementedError();
   }
 
@@ -245,7 +255,8 @@ class MockBuildContext extends BuildContext {
   }
 
   @override
-  InheritedElement? getElementForInheritedWidgetOfExactType<T extends InheritedWidget>() {
+  InheritedElement?
+      getElementForInheritedWidgetOfExactType<T extends InheritedWidget>() {
     throw UnimplementedError();
   }
 

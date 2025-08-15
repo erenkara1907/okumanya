@@ -45,7 +45,8 @@ abstract class BaseRepository {
         if (cachedData != null) {
           return Right(cachedData);
         } else {
-          return const Left(NetworkFailure(message: 'No internet connection and no cached data'));
+          return const Left(NetworkFailure(
+              message: 'No internet connection and no cached data'));
         }
       }
     } on DioException catch (e) {

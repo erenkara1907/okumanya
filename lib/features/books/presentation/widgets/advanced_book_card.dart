@@ -3,6 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/advanced_card.dart';
+import '../../../../core/widgets/advanced_loading.dart';
+import '../../../../core/widgets/advanced_error_widget.dart';
 import '../../domain/entities/book.dart';
 
 /// Advanced book card with enhanced UI and animations
@@ -29,7 +31,7 @@ class AdvancedBookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return SizedBox(
       width: width,
       height: height,
@@ -47,7 +49,8 @@ class AdvancedBookCard extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppConstants.smallPadding),
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.smallPadding),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.1),
@@ -57,7 +60,8 @@ class AdvancedBookCard extends StatelessWidget {
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(AppConstants.smallPadding),
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.smallPadding),
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
@@ -69,13 +73,27 @@ class AdvancedBookCard extends StatelessWidget {
                                 placeholder: (context, url) => Container(
                                   color: theme.colorScheme.surface,
                                   child: const Center(
-                                    child: CircularProgressIndicator(),
+                                    child: AdvancedLoading(
+                                      type: LoadingType.pulse,
+                                      size: 32,
+                                      showBackground: false,
+                                    ),
                                   ),
                                 ),
-                                errorWidget: (context, url, error) => _buildPlaceholderCover(theme),
+                                errorWidget: (context, url, error) => Container(
+                                  color: theme.colorScheme.surface,
+                                  child: const Center(
+                                    child: AdvancedErrorWidget(
+                                      message: 'Image failed to load',
+                                      type: ErrorType.network,
+                                      showIcon: true,
+                                      actionText: 'Retry',
+                                    ),
+                                  ),
+                                ),
                               )
                             : _buildPlaceholderCover(theme),
-                        
+
                         // Favorite Button
                         if (showFavorite)
                           Positioned(
@@ -90,21 +108,26 @@ class AdvancedBookCard extends StatelessWidget {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
-                                  book.isFavorite ? Icons.favorite : Icons.favorite_border,
-                                  color: book.isFavorite ? Colors.red : Colors.white,
+                                  book.isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: book.isFavorite
+                                      ? Colors.red
+                                      : Colors.white,
                                   size: 16,
                                 ),
                               ),
                             ),
                           ),
-                        
+
                         // Reading Status Badge
                         if (book.isCompleted)
                           Positioned(
                             top: 8,
                             left: 8,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.primary,
                                 borderRadius: BorderRadius.circular(10),
@@ -124,9 +147,9 @@ class AdvancedBookCard extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Book Information
             Expanded(
               flex: 2,
@@ -142,9 +165,9 @@ class AdvancedBookCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   // Author
                   Text(
                     book.author,
@@ -154,12 +177,13 @@ class AdvancedBookCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  
+
                   const SizedBox(height: 6),
-                  
+
                   // Category
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -172,9 +196,9 @@ class AdvancedBookCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+
                   const Spacer(),
-                  
+
                   // Progress Bar
                   if (showProgress && book.progress > 0)
                     Column(
@@ -200,7 +224,8 @@ class AdvancedBookCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                           child: LinearProgressIndicator(
                             value: book.progressPercentage,
-                            backgroundColor: theme.colorScheme.outline.withValues(alpha: 0.3),
+                            backgroundColor: theme.colorScheme.outline
+                                .withValues(alpha: 0.3),
                             valueColor: AlwaysStoppedAnimation<Color>(
                               theme.colorScheme.primary,
                             ),
@@ -217,7 +242,7 @@ class AdvancedBookCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildPlaceholderCover(ThemeData theme) {
     return Container(
       color: theme.colorScheme.surface,

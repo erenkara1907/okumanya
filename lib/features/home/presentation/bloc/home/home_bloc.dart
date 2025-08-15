@@ -66,7 +66,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  Future<void> _onSearchBooks(SearchBooks event, Emitter<HomeState> emit) async {
+  Future<void> _onSearchBooks(
+      SearchBooks event, Emitter<HomeState> emit) async {
     final query = event.query.toLowerCase();
 
     if (query.isEmpty) {
@@ -78,7 +79,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
 
     final filteredBooks = state.books.where((book) {
-      return book.title.toLowerCase().contains(query) || book.author.toLowerCase().contains(query);
+      return book.title.toLowerCase().contains(query) ||
+          book.author.toLowerCase().contains(query);
     }).toList();
 
     emit(state.copyWith(
@@ -87,7 +89,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ));
   }
 
-  Future<void> _onFilterBooks(FilterBooks event, Emitter<HomeState> emit) async {
+  Future<void> _onFilterBooks(
+      FilterBooks event, Emitter<HomeState> emit) async {
     final category = event.category;
 
     List<BookModel> filteredBooks;
@@ -103,7 +106,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (state.searchQuery.isNotEmpty) {
       final query = state.searchQuery.toLowerCase();
       filteredBooks = filteredBooks.where((book) {
-        return book.title.toLowerCase().contains(query) || book.author.toLowerCase().contains(query);
+        return book.title.toLowerCase().contains(query) ||
+            book.author.toLowerCase().contains(query);
       }).toList();
     }
 

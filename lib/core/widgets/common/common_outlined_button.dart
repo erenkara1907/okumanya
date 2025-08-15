@@ -49,7 +49,7 @@ class CommonOutlinedButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            color: isEnabled 
+            color: isEnabled
                 ? (textColor ?? AppColors.defaultAppColor.primaryColor)
                 : Colors.grey,
             fontSize: fontSize ?? 16.sp,

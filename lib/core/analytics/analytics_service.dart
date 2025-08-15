@@ -30,14 +30,15 @@ class AnalyticsService {
     String? readingLevel,
   }) async {
     if (!_isEnabled) return;
-    
+
     try {
       // Custom analytics implementation
       // This can be replaced with your preferred analytics solution
       // (Mixpanel, Amplitude, PostHog, etc.)
-      
+
       if (kDebugMode) {
-        print('👤 User properties set: $userId, $userType, $preferredLanguage, $readingLevel');
+        print(
+            '👤 User properties set: $userId, $userType, $preferredLanguage, $readingLevel');
       }
     } catch (e) {
       await _recordError(e, 'setUserProperties');
@@ -45,9 +46,10 @@ class AnalyticsService {
   }
 
   /// Track screen views
-  Future<void> trackScreen(String screenName, {Map<String, dynamic>? parameters}) async {
+  Future<void> trackScreen(String screenName,
+      {Map<String, dynamic>? parameters}) async {
     if (!_isEnabled) return;
-    
+
     try {
       // Custom screen tracking implementation
       if (kDebugMode) {
@@ -59,9 +61,10 @@ class AnalyticsService {
   }
 
   /// Track user events
-  Future<void> trackEvent(String eventName, {Map<String, dynamic>? parameters}) async {
+  Future<void> trackEvent(String eventName,
+      {Map<String, dynamic>? parameters}) async {
     if (!_isEnabled) return;
-    
+
     try {
       // Custom event tracking implementation
       if (kDebugMode) {
@@ -73,7 +76,8 @@ class AnalyticsService {
   }
 
   /// Track book-related events
-  Future<void> trackBookEvent(String action, {
+  Future<void> trackBookEvent(
+    String action, {
     required String bookId,
     required String bookTitle,
     String? author,
@@ -114,7 +118,8 @@ class AnalyticsService {
   }
 
   /// Track user engagement
-  Future<void> trackEngagement(String action, {Map<String, dynamic>? parameters}) async {
+  Future<void> trackEngagement(String action,
+      {Map<String, dynamic>? parameters}) async {
     await trackEvent('user_engagement', parameters: {
       'action': action,
       ...?parameters,
@@ -124,16 +129,17 @@ class AnalyticsService {
   /// Track app performance metrics
   Future<void> trackPerformance(String operation, Duration duration) async {
     if (!_isEnabled) return;
-    
+
     try {
       // Custom performance tracking implementation
       await trackEvent('performance_metric', parameters: {
         'operation': operation,
         'duration_ms': duration.inMilliseconds,
       });
-      
+
       if (kDebugMode) {
-        print('⚡ Performance tracked: $operation took ${duration.inMilliseconds}ms');
+        print(
+            '⚡ Performance tracked: $operation took ${duration.inMilliseconds}ms');
       }
     } catch (e) {
       await _recordError(e, 'trackPerformance');
@@ -148,8 +154,8 @@ class AnalyticsService {
     Map<String, dynamic>? customKeys,
     bool fatal = false,
   }) async {
-    await _recordError(exception, reason, stackTrace: stackTrace, 
-                      customKeys: customKeys, fatal: fatal);
+    await _recordError(exception, reason,
+        stackTrace: stackTrace, customKeys: customKeys, fatal: fatal);
   }
 
   Future<void> _recordError(
@@ -163,7 +169,7 @@ class AnalyticsService {
       // Custom error recording implementation
       // This can be replaced with your preferred error tracking solution
       // (Sentry, Bugsnag, etc.)
-      
+
       if (kDebugMode) {
         print('🚨 Error recorded: $exception');
         if (reason != null) print('Reason: $reason');
@@ -179,13 +185,14 @@ class AnalyticsService {
   }
 
   /// Record custom traces for performance monitoring
-  Future<T> traceOperation<T>(String operationName, Future<T> Function() operation) async {
+  Future<T> traceOperation<T>(
+      String operationName, Future<T> Function() operation) async {
     final stopwatch = Stopwatch()..start();
-    
+
     try {
       final result = await operation();
       stopwatch.stop();
-      
+
       await trackPerformance(operationName, stopwatch.elapsed);
       return result;
     } catch (e) {
@@ -196,16 +203,17 @@ class AnalyticsService {
   }
 
   /// Log breadcrumb for error context
-  Future<void> logBreadcrumb(String message, {Map<String, dynamic>? data}) async {
+  Future<void> logBreadcrumb(String message,
+      {Map<String, dynamic>? data}) async {
     if (!_isEnabled) return;
-    
+
     try {
       // Custom breadcrumb logging implementation
       await trackEvent('breadcrumb', parameters: {
         'message': message,
         ...?data,
       });
-      
+
       if (kDebugMode) {
         print('🍞 Breadcrumb: $message');
       }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../constants/app_constants.dart';
 import '../../../shared/resources/styles/app_themes.dart';
 
 class Shimmer extends StatefulWidget {
@@ -55,13 +56,15 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   );
 
   LinearGradient get gradient {
-    final sourceGradient = _isDarkTheme ? _shimmerDarkGradient : _shimmerGradient;
+    final sourceGradient =
+        _isDarkTheme ? _shimmerDarkGradient : _shimmerGradient;
     return LinearGradient(
       colors: sourceGradient.colors,
       stops: sourceGradient.stops,
       begin: sourceGradient.begin,
       end: sourceGradient.end,
-      transform: _SlidingGradientTransform(slidePercent: _shimmerController.value),
+      transform:
+          _SlidingGradientTransform(slidePercent: _shimmerController.value),
     );
   }
 
@@ -73,12 +76,12 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    
+
     // Cache theme type to avoid repeated checks
     _isDarkTheme = AppThemeSetting.currentAppThemeType == AppThemeType.dark;
 
     _shimmerController = AnimationController.unbounded(vsync: this)
-      ..repeat(min: -0.5, max: 1.5, period: const Duration(milliseconds: 1000));
+      ..repeat(min: -0.5, max: 1.5, period: const Duration(milliseconds: 1000)); // Custom shimmer animation duration
   }
 
   @override

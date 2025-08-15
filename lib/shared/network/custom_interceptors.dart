@@ -8,22 +8,23 @@ class AuthInterceptor extends Interceptor {
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     final token = await SecureStorageService.getAuthToken();
-    
+
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }
-    
+
     options.headers['Content-Type'] = 'application/json';
     options.headers['Accept'] = 'application/json';
-    
+
     if (AppConfig.isDevelopment) {
-      developer.log('Request: ${options.method} ${options.uri}', name: 'NetworkRequest');
+      developer.log('Request: ${options.method} ${options.uri}',
+          name: 'NetworkRequest');
       developer.log('Headers: ${options.headers}', name: 'NetworkRequest');
       if (options.data != null) {
         developer.log('Data: ${options.data}', name: 'NetworkRequest');
       }
     }
-    
+
     handler.next(options);
   }
 
@@ -31,7 +32,9 @@ class AuthInterceptor extends Interceptor {
   Future<void> onResponse(
       Response response, ResponseInterceptorHandler handler) async {
     if (AppConfig.isDevelopment) {
-      developer.log('Response: ${response.statusCode} ${response.requestOptions.uri}', name: 'NetworkResponse');
+      developer.log(
+          'Response: ${response.statusCode} ${response.requestOptions.uri}',
+          name: 'NetworkResponse');
       developer.log('Data: ${response.data}', name: 'NetworkResponse');
     }
     handler.next(response);
@@ -44,7 +47,7 @@ class AuthInterceptor extends Interceptor {
       developer.log('Error: ${err.message}', name: 'NetworkError');
       developer.log('Response: ${err.response?.data}', name: 'NetworkError');
     }
-    
+
     // Token expired, try to refresh
     if (err.response?.statusCode == 401) {
       final refreshToken = await SecureStorageService.getRefreshToken();
@@ -54,7 +57,7 @@ class AuthInterceptor extends Interceptor {
         await SecureStorageService.clearAuthData();
       }
     }
-    
+
     handler.next(err);
   }
 }

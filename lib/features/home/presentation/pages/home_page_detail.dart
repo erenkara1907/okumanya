@@ -23,7 +23,8 @@ class HomePageDetail extends StatelessWidget with HomePageDetailMixin {
       isFullScreen: true,
       appBar: CommonAppBar(
         backButtonEnable: true,
-        backButton: IconButton(onPressed: () => context.back(), icon: Icon(Icons.arrow_back)),
+        backButton: IconButton(
+            onPressed: () => context.back(), icon: Icon(Icons.arrow_back)),
         title: "",
       ),
       body: Padding(
@@ -33,9 +34,13 @@ class HomePageDetail extends StatelessWidget with HomePageDetailMixin {
           children: [
             _bookInfo(context),
             SizedBox(height: 24.h),
-            _toolButton(context, text: 'Favorilerime Ekle', assetPath: 'assets/images/my-favorites.png'),
+            _toolButton(context,
+                text: 'Favorilerime Ekle',
+                assetPath: 'assets/images/my-favorites.png'),
             SizedBox(height: 16.h),
-            _toolButton(context, text: 'Kitaplığıma Ekle', assetPath: 'assets/images/my-library.png'),
+            _toolButton(context,
+                text: 'Kitaplığıma Ekle',
+                assetPath: 'assets/images/my-library.png'),
             SizedBox(height: 30.h),
             // GradientButton(
             //   onPressed: () {},

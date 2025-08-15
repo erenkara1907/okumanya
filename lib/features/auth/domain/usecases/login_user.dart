@@ -18,13 +18,14 @@ class LoginUser implements UseCase<AuthUser, LoginUserParams> {
     if (params.username.isEmpty) {
       return const Left(ValidationFailure(message: 'Username cannot be empty'));
     }
-    
+
     if (params.password.isEmpty) {
       return const Left(ValidationFailure(message: 'Password cannot be empty'));
     }
-    
+
     if (params.password.length < 6) {
-      return const Left(ValidationFailure(message: 'Password must be at least 6 characters'));
+      return const Left(
+          ValidationFailure(message: 'Password must be at least 6 characters'));
     }
 
     // Delegate to repository

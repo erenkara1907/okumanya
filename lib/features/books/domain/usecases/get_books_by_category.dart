@@ -8,7 +8,8 @@ import '../repositories/books_repository.dart';
 
 /// Use case for retrieving books by category
 @lazySingleton
-class GetBooksByCategory implements UseCase<List<Book>, GetBooksByCategoryParams> {
+class GetBooksByCategory
+    implements UseCase<List<Book>, GetBooksByCategoryParams> {
   const GetBooksByCategory(this._repository);
 
   final BooksRepository _repository;

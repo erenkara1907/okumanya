@@ -29,16 +29,17 @@ class BooksRepositoryImpl implements BooksRepository {
         try {
           final bookModels = await remoteDataSource.getAllBooks();
           final books = bookModels.map((model) => model.toDomain()).toList();
-          
+
           // Cache the data for offline use
           await localDataSource.cacheBooks(bookModels);
-          
+
           return Right(books);
         } on Exception catch (e) {
           // If remote fails, try to get cached data
           final cachedModels = await localDataSource.getCachedBooks();
           if (cachedModels != null && cachedModels.isNotEmpty) {
-            final books = cachedModels.map((model) => model.toDomain()).toList();
+            final books =
+                cachedModels.map((model) => model.toDomain()).toList();
             return Right(books);
           }
           return Left(_mapExceptionToFailure(e));
@@ -50,7 +51,8 @@ class BooksRepositoryImpl implements BooksRepository {
           final books = cachedModels.map((model) => model.toDomain()).toList();
           return Right(books);
         }
-        return const Left(NetworkFailure(message: 'No internet connection and no cached data available'));
+        return const Left(NetworkFailure(
+            message: 'No internet connection and no cached data available'));
       }
     } on Exception catch (e) {
       return Left(_mapExceptionToFailure(e));
@@ -58,34 +60,40 @@ class BooksRepositoryImpl implements BooksRepository {
   }
 
   @override
-  Future<Either<Failure, List<Book>>> getBooksByCategory(String category) async {
+  Future<Either<Failure, List<Book>>> getBooksByCategory(
+      String category) async {
     try {
       if (await networkInfo.isConnected) {
         try {
-          final bookModels = await remoteDataSource.getBooksByCategory(category);
+          final bookModels =
+              await remoteDataSource.getBooksByCategory(category);
           final books = bookModels.map((model) => model.toDomain()).toList();
-          
+
           // Cache the data for offline use
           await localDataSource.cacheBooksByCategory(category, bookModels);
-          
+
           return Right(books);
         } on Exception catch (e) {
           // If remote fails, try to get cached data
-          final cachedModels = await localDataSource.getCachedBooksByCategory(category);
+          final cachedModels =
+              await localDataSource.getCachedBooksByCategory(category);
           if (cachedModels != null && cachedModels.isNotEmpty) {
-            final books = cachedModels.map((model) => model.toDomain()).toList();
+            final books =
+                cachedModels.map((model) => model.toDomain()).toList();
             return Right(books);
           }
           return Left(_mapExceptionToFailure(e));
         }
       } else {
         // No internet connection, get cached data
-        final cachedModels = await localDataSource.getCachedBooksByCategory(category);
+        final cachedModels =
+            await localDataSource.getCachedBooksByCategory(category);
         if (cachedModels != null && cachedModels.isNotEmpty) {
           final books = cachedModels.map((model) => model.toDomain()).toList();
           return Right(books);
         }
-        return const Left(NetworkFailure(message: 'No internet connection and no cached data available'));
+        return const Left(NetworkFailure(
+            message: 'No internet connection and no cached data available'));
       }
     } on Exception catch (e) {
       return Left(_mapExceptionToFailure(e));
@@ -99,28 +107,33 @@ class BooksRepositoryImpl implements BooksRepository {
         try {
           final bookModels = await remoteDataSource.searchBooks(query);
           final books = bookModels.map((model) => model.toDomain()).toList();
-          
+
           // Cache the search results
           await localDataSource.cacheSearchResults(query, bookModels);
-          
+
           return Right(books);
         } on Exception catch (e) {
           // If remote fails, try to get cached search results
-          final cachedModels = await localDataSource.getCachedSearchResults(query);
+          final cachedModels =
+              await localDataSource.getCachedSearchResults(query);
           if (cachedModels != null && cachedModels.isNotEmpty) {
-            final books = cachedModels.map((model) => model.toDomain()).toList();
+            final books =
+                cachedModels.map((model) => model.toDomain()).toList();
             return Right(books);
           }
           return Left(_mapExceptionToFailure(e));
         }
       } else {
         // No internet connection, get cached search results
-        final cachedModels = await localDataSource.getCachedSearchResults(query);
+        final cachedModels =
+            await localDataSource.getCachedSearchResults(query);
         if (cachedModels != null && cachedModels.isNotEmpty) {
           final books = cachedModels.map((model) => model.toDomain()).toList();
           return Right(books);
         }
-        return const Left(NetworkFailure(message: 'No internet connection and no cached search results available'));
+        return const Left(NetworkFailure(
+            message:
+                'No internet connection and no cached search results available'));
       }
     } on Exception catch (e) {
       return Left(_mapExceptionToFailure(e));
@@ -133,10 +146,10 @@ class BooksRepositoryImpl implements BooksRepository {
       if (await networkInfo.isConnected) {
         try {
           final bookModel = await remoteDataSource.getBookById(id);
-          
+
           // Cache the individual book
           await localDataSource.cacheBook(bookModel);
-          
+
           return Right(bookModel.toDomain());
         } on Exception catch (e) {
           // If remote fails, try to get cached book
@@ -152,7 +165,8 @@ class BooksRepositoryImpl implements BooksRepository {
         if (cachedModel != null) {
           return Right(cachedModel.toDomain());
         }
-        return const Left(NetworkFailure(message: 'No internet connection and book not cached'));
+        return const Left(NetworkFailure(
+            message: 'No internet connection and book not cached'));
       }
     } on Exception catch (e) {
       return Left(_mapExceptionToFailure(e));
@@ -160,13 +174,15 @@ class BooksRepositoryImpl implements BooksRepository {
   }
 
   @override
-  Future<Either<Failure, Book>> updateBookProgress(String bookId, double progress) async {
+  Future<Either<Failure, Book>> updateBookProgress(
+      String bookId, double progress) async {
     if (!await networkInfo.isConnected) {
       return const Left(NetworkFailure(message: 'No internet connection'));
     }
 
     try {
-      final bookModel = await remoteDataSource.updateBookProgress(bookId, progress);
+      final bookModel =
+          await remoteDataSource.updateBookProgress(bookId, progress);
       return Right(bookModel.toDomain());
     } on Exception catch (e) {
       return Left(_mapExceptionToFailure(e));
@@ -223,10 +239,10 @@ class BooksRepositoryImpl implements BooksRepository {
       if (await networkInfo.isConnected) {
         try {
           final categories = await remoteDataSource.getCategories();
-          
+
           // Cache the categories
           await localDataSource.cacheCategories(categories);
-          
+
           return Right(categories);
         } on Exception catch (e) {
           // If remote fails, try to get cached categories
@@ -242,7 +258,9 @@ class BooksRepositoryImpl implements BooksRepository {
         if (cachedCategories != null && cachedCategories.isNotEmpty) {
           return Right(cachedCategories);
         }
-        return const Left(NetworkFailure(message: 'No internet connection and no cached categories available'));
+        return const Left(NetworkFailure(
+            message:
+                'No internet connection and no cached categories available'));
       }
     } on Exception catch (e) {
       return Left(_mapExceptionToFailure(e));
@@ -252,40 +270,40 @@ class BooksRepositoryImpl implements BooksRepository {
   /// Maps exceptions to appropriate failure types
   Failure _mapExceptionToFailure(Exception exception) {
     final message = exception.toString();
-    
+
     if (message.contains('timeout')) {
       return const NetworkFailure(message: 'Request timeout');
     }
-    
+
     if (message.contains('Server error')) {
       // Extract status code if available
       final statusCodeMatch = RegExp(r'\((\d+)\)').firstMatch(message);
-      final statusCode = statusCodeMatch != null 
+      final statusCode = statusCodeMatch != null
           ? int.tryParse(statusCodeMatch.group(1) ?? '')
           : null;
-      
+
       if (statusCode == 401) {
         return const AuthFailure(message: 'Authentication required');
       } else if (statusCode == 404) {
         return const ServerFailure(message: 'Resource not found');
       } else if (statusCode != null && statusCode >= 500) {
         return ServerFailure(
-          message: 'Server error occurred', 
+          message: 'Server error occurred',
           statusCode: statusCode,
         );
       }
-      
+
       return ServerFailure(
-        message: message, 
+        message: message,
         statusCode: statusCode,
       );
     }
-    
-    if (message.contains('No internet connection') || 
+
+    if (message.contains('No internet connection') ||
         message.contains('Connection timeout')) {
       return const NetworkFailure(message: 'Network connection failed');
     }
-    
+
     return UnexpectedFailure(message: message);
   }
 }

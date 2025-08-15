@@ -22,7 +22,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   _login(Login event, Emitter<LoginState> emit) async {
     print('🔄 LoginBloc: Starting login process for ${event.email}');
-    log('🔄 LoginBloc: Starting login process for ${event.email}', name: 'LoginBloc');
+    log('🔄 LoginBloc: Starting login process for ${event.email}',
+        name: 'LoginBloc');
     emit(state.copyWith(status: LoginStatus.loading));
 
     try {
@@ -35,11 +36,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       print('🔍 LoginBloc: Processing response');
       log('🔍 LoginBloc: Processing response', name: 'LoginBloc');
-      
+
       await response.fold(
         (failure) async {
           print('❌ LoginBloc: Login failed with failure: ${failure.message}');
-          log('❌ LoginBloc: Login failed with failure: ${failure.message}', name: 'LoginBloc');
+          log('❌ LoginBloc: Login failed with failure: ${failure.message}',
+              name: 'LoginBloc');
           if (!emit.isDone) {
             emit(state.copyWith(
               status: LoginStatus.error,
@@ -48,37 +50,45 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           }
         },
         (loginEntity) async {
-          print('✅ LoginBloc: Login successful for user ${loginEntity.user.name}');
-          log('✅ LoginBloc: Login successful for user ${loginEntity.user.name}', name: 'LoginBloc');
+          print(
+              '✅ LoginBloc: Login successful for user ${loginEntity.user.name}');
+          log('✅ LoginBloc: Login successful for user ${loginEntity.user.name}',
+              name: 'LoginBloc');
 
           try {
             // Save login data using AuthService
             print('💾 LoginBloc: Saving login data to secure storage');
-            log('💾 LoginBloc: Saving login data to secure storage', name: 'LoginBloc');
+            log('💾 LoginBloc: Saving login data to secure storage',
+                name: 'LoginBloc');
             await _authService.saveLoginData(
               token: loginEntity.token,
               userId: loginEntity.user.id.toString(),
               isTeacher: loginEntity.isTeacher,
             );
 
-            print('🔄 LoginBloc: About to emit success status. emit.isDone: ${emit.isDone}');
-            log('🔄 LoginBloc: About to emit success status. emit.isDone: ${emit.isDone}', name: 'LoginBloc');
-            
+            print(
+                '🔄 LoginBloc: About to emit success status. emit.isDone: ${emit.isDone}');
+            log('🔄 LoginBloc: About to emit success status. emit.isDone: ${emit.isDone}',
+                name: 'LoginBloc');
+
             if (!emit.isDone) {
               emit(state.copyWith(
                 loginEntity: loginEntity,
                 status: LoginStatus.success,
               ));
-              
+
               print('✅ LoginBloc: Success status emitted successfully');
-              log('✅ LoginBloc: Success status emitted successfully', name: 'LoginBloc');
+              log('✅ LoginBloc: Success status emitted successfully',
+                  name: 'LoginBloc');
             } else {
               print('⚠️ LoginBloc: Cannot emit success, handler completed');
-              log('⚠️ LoginBloc: Cannot emit success, handler completed', name: 'LoginBloc');
+              log('⚠️ LoginBloc: Cannot emit success, handler completed',
+                  name: 'LoginBloc');
             }
           } catch (storageError) {
             print('❌ LoginBloc: Failed to save login data: $storageError');
-            log('❌ LoginBloc: Failed to save login data: $storageError', name: 'LoginBloc');
+            log('❌ LoginBloc: Failed to save login data: $storageError',
+                name: 'LoginBloc');
             if (!emit.isDone) {
               emit(state.copyWith(
                 status: LoginStatus.error,

@@ -3,7 +3,6 @@ import '../../shared/storage/secure_storage_service.dart';
 
 @lazySingleton
 class AuthService {
-  
   /// Check if user is logged in (has valid token)
   Future<bool> isLoggedIn() async {
     return await SecureStorageService.hasAuthToken();
@@ -23,7 +22,7 @@ class AuthService {
     await SecureStorageService.saveAuthToken(token);
     await SecureStorageService.saveUserId(userId);
     await SecureStorageService.saveIsTeacher(isTeacher);
-    
+
     // Save additional user info if needed
     // You can extend this to save more user data
   }
@@ -63,7 +62,7 @@ class AuthService {
     // Here you can add actual token validation logic
     // For now, we assume if token exists, it's valid
     // In a real app, you'd make an API call to validate
-    
+
     try {
       // You can decode JWT token and check expiry
       // Or make a simple API call to validate token

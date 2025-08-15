@@ -18,29 +18,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<LoginResponseModel> login(LoginRequestModel request) async {
-    log('🌍 AuthRemoteDataSource: Making API call to /login', name: 'DataSource');
-    log('📤 AuthRemoteDataSource: Request data: ${request.toJson()}', name: 'DataSource');
-    
+    log('🌍 AuthRemoteDataSource: Making API call to /login',
+        name: 'DataSource');
+    log('📤 AuthRemoteDataSource: Request data: ${request.toJson()}',
+        name: 'DataSource');
+
     try {
       final response = await dio.post(
         '/login',
         data: request.toJson(),
       );
-      
-      log('📥 AuthRemoteDataSource: Response status: ${response.statusCode}', name: 'DataSource');
-      log('📄 AuthRemoteDataSource: Response data: ${response.data}', name: 'DataSource');
-      
+
+      log('📥 AuthRemoteDataSource: Response status: ${response.statusCode}',
+          name: 'DataSource');
+      log('📄 AuthRemoteDataSource: Response data: ${response.data}',
+          name: 'DataSource');
+
       return LoginResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       log('❌ AuthRemoteDataSource: API call failed: $e', name: 'DataSource');
-      
+
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.sendTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
           e.type == DioExceptionType.connectionError) {
         throw const NetworkException(message: 'Network connection failed');
       }
-      
+
       final statusCode = e.response?.statusCode;
       switch (statusCode) {
         case 401:

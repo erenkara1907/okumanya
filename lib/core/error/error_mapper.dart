@@ -12,22 +12,22 @@ class ErrorMapper {
           message: ExceptionType.timeout.message,
           statusCode: dioException.response?.statusCode,
         );
-      
+
       case DioExceptionType.connectionError:
         return NetworkFailure(
           message: ExceptionType.noInternetConnection.message,
           statusCode: dioException.response?.statusCode,
         );
-      
+
       case DioExceptionType.badResponse:
         return _mapStatusCodeToFailure(dioException);
-      
+
       case DioExceptionType.cancel:
         return NetworkFailure(
           message: ExceptionType.requestCancelled.message,
           statusCode: dioException.response?.statusCode,
         );
-      
+
       case DioExceptionType.unknown:
       default:
         return UnexpectedFailure(
@@ -39,7 +39,7 @@ class ErrorMapper {
 
   static Failure _mapStatusCodeToFailure(DioException dioException) {
     final statusCode = dioException.response?.statusCode;
-    
+
     switch (statusCode) {
       case 400:
         return ValidationFailure(
@@ -91,23 +91,23 @@ class ErrorMapper {
       case ExceptionType.timeout:
       case ExceptionType.requestCancelled:
         return NetworkFailure(message: exceptionType.message);
-      
+
       case ExceptionType.unauthorisedRequest:
       case ExceptionType.unauthorizedUser:
         return AuthFailure(message: exceptionType.message);
-      
+
       case ExceptionType.badRequest:
       case ExceptionType.conflict:
       case ExceptionType.formatException:
         return ValidationFailure(message: exceptionType.message);
-      
+
       case ExceptionType.notFound:
         return NotFoundFailure(message: exceptionType.message);
-      
+
       case ExceptionType.internalServerError:
       case ExceptionType.serviceUnavailable:
         return ServerFailure(message: exceptionType.message);
-      
+
       case ExceptionType.unknownError:
         return UnexpectedFailure(message: exceptionType.message);
     }

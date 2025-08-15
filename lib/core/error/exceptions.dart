@@ -6,7 +6,7 @@ abstract class AppException extends Equatable implements Exception {
 
   /// Human-readable error message
   final String message;
-  
+
   /// Optional HTTP status code or error code
   final int? statusCode;
 

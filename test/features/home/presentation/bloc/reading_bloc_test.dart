@@ -48,7 +48,9 @@ void main() {
       blocTest<ReadingBloc, ReadingState>(
         'opens reading modal with single page',
         build: () => readingBloc,
-        act: (bloc) => bloc.add(OpenReadingModal(pages: [ReadingPage(title: 'Single page', content: 'Single page')])),
+        act: (bloc) => bloc.add(OpenReadingModal(pages: [
+          ReadingPage(title: 'Single page', content: 'Single page')
+        ])),
         expect: () => [
           const ReadingState().copyWith(
             isModalOpen: true,
@@ -379,12 +381,18 @@ void main() {
         final newState = initialState.copyWith(
           isModalOpen: true,
           currentPageIndex: 5,
-          pages: [ReadingPage(title: 'Page 1', content: 'Page 1'), ReadingPage(title: 'Page 2', content: 'Page 2')],
+          pages: [
+            ReadingPage(title: 'Page 1', content: 'Page 1'),
+            ReadingPage(title: 'Page 2', content: 'Page 2')
+          ],
         );
 
         expect(newState.isModalOpen, true);
         expect(newState.currentPageIndex, 5);
-        expect(newState.pages, [ReadingPage(title: 'Page 1', content: 'Page 1'), ReadingPage(title: 'Page 2', content: 'Page 2')]);
+        expect(newState.pages, [
+          ReadingPage(title: 'Page 1', content: 'Page 1'),
+          ReadingPage(title: 'Page 2', content: 'Page 2')
+        ]);
         expect(newState.status, initialState.status);
       });
 
@@ -403,7 +411,10 @@ void main() {
         'handles very large pages list',
         build: () => readingBloc,
         act: (bloc) {
-          final largePagesData = List.generate(1000, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}'));
+          final largePagesData = List.generate(
+              1000,
+              (index) => ReadingPage(
+                  title: 'Page ${index + 1}', content: 'Content ${index + 1}'));
           bloc.add(OpenReadingModal(pages: largePagesData));
           bloc.add(GoToPage(pageIndex: 999));
         },
@@ -411,13 +422,21 @@ void main() {
           ReadingState().copyWith(
             isModalOpen: true,
             status: ReadingStatus.success,
-            pages: List.generate(1000, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                1000,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 0,
           ),
           ReadingState().copyWith(
             isModalOpen: true,
             status: ReadingStatus.success,
-            pages: List.generate(1000, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                1000,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 999,
           ),
         ],
@@ -427,7 +446,10 @@ void main() {
         'handles rapid page navigation',
         build: () => readingBloc,
         seed: () => const ReadingState().copyWith(
-          pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+          pages: List.generate(
+              20,
+              (index) => ReadingPage(
+                  title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
           currentPageIndex: 10,
         ),
         act: (bloc) {
@@ -440,63 +462,123 @@ void main() {
         },
         expect: () => [
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 11,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 12,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 13,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 14,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 15,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 14,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 13,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 12,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 11,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 10,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 9,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 8,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 7,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 6,
           ),
           ReadingState().copyWith(
-            pages: List.generate(20, (index) => ReadingPage(title: 'Page ${index + 1}', content: 'Content ${index + 1}')),
+            pages: List.generate(
+                20,
+                (index) => ReadingPage(
+                    title: 'Page ${index + 1}',
+                    content: 'Content ${index + 1}')),
             currentPageIndex: 5,
           ),
         ],

@@ -24,7 +24,8 @@ ServerException handleException(dynamic error, {String? message}) {
             final statusCode = error.response?.statusCode;
             switch (statusCode) {
               case 400:
-                exception = ServerException(ExceptionType.badRequest, message: message);
+                exception =
+                    ServerException(ExceptionType.badRequest, message: message);
                 break;
               case 401:
                 exception = ServerException(ExceptionType.unauthorisedRequest);
@@ -51,7 +52,8 @@ ServerException handleException(dynamic error, {String? message}) {
                 exception = ServerException(ExceptionType.conflict);
                 break;
               default:
-                exception = ServerException(ExceptionType.unknownError, message: message);
+                exception = ServerException(ExceptionType.unknownError,
+                    message: message);
             }
             break;
           case DioExceptionType.sendTimeout:

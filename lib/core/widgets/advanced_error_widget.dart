@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_constants.dart';
 import '../theme/app_theme.dart';
 
 /// Advanced error widget with different types and actions
@@ -23,9 +24,9 @@ class AdvancedErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppConstants.largePadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -44,9 +45,8 @@ class AdvancedErrorWidget extends StatelessWidget {
                 color: _getErrorColor(type),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppConstants.defaultPadding),
           ],
-          
           Text(
             _getErrorTitle(type),
             style: theme.textTheme.headlineSmall?.copyWith(
@@ -55,9 +55,7 @@ class AdvancedErrorWidget extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          
-          const SizedBox(height: 8),
-          
+          const SizedBox(height: AppConstants.smallPadding),
           Text(
             message,
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -67,9 +65,8 @@ class AdvancedErrorWidget extends StatelessWidget {
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
-          
           if (onRetry != null) ...[
-            const SizedBox(height: 24),
+            const SizedBox(height: AppConstants.largePadding),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -79,7 +76,7 @@ class AdvancedErrorWidget extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _getErrorColor(type),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: AppConstants.smallPadding + 4),
                 ),
               ),
             ),
@@ -88,7 +85,7 @@ class AdvancedErrorWidget extends StatelessWidget {
       ),
     );
   }
-  
+
   Color _getErrorColor(ErrorType type) {
     switch (type) {
       case ErrorType.network:
@@ -101,7 +98,7 @@ class AdvancedErrorWidget extends StatelessWidget {
         return AppTheme.textSecondary;
     }
   }
-  
+
   IconData _getErrorIcon(ErrorType type) {
     switch (type) {
       case ErrorType.network:
@@ -114,7 +111,7 @@ class AdvancedErrorWidget extends StatelessWidget {
         return Icons.warning_amber_rounded;
     }
   }
-  
+
   IconData _getRetryIcon(ErrorType type) {
     switch (type) {
       case ErrorType.network:
@@ -127,7 +124,7 @@ class AdvancedErrorWidget extends StatelessWidget {
         return Icons.refresh_rounded;
     }
   }
-  
+
   String _getErrorTitle(ErrorType type) {
     switch (type) {
       case ErrorType.network:

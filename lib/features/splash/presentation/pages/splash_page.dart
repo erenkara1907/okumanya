@@ -27,16 +27,16 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> _initializeAndNavigate() async {
     // Initialize device info
     await initialize(context);
-    
+
     // Add minimum splash duration
     await Future.delayed(const Duration(seconds: 2));
-    
+
     if (!mounted) return;
-    
+
     // Check authentication status
     final authService = getIt<AuthService>();
     final isLoggedIn = await authService.validateToken();
-    
+
     if (isLoggedIn) {
       // User has valid token, go to main page
       context.router.replace(const MainRoute());
@@ -70,11 +70,13 @@ Future<String?> getId() async {
   if (Platform.isIOS) {
     var iosDeviceInfo = await deviceInfo.iosInfo;
     iosDeviceInfo.identifierForVendor;
-    await Hive.box(HiveBoxConstants.deviceId).put("deviceId", iosDeviceInfo.identifierForVendor);
+    await Hive.box(HiveBoxConstants.deviceId)
+        .put("deviceId", iosDeviceInfo.identifierForVendor);
   } else if (Platform.isAndroid) {
     var androidDeviceInfo = await deviceInfo.androidInfo;
     androidDeviceInfo.id;
-    await Hive.box(HiveBoxConstants.deviceId).put("deviceId", androidDeviceInfo.id);
+    await Hive.box(HiveBoxConstants.deviceId)
+        .put("deviceId", androidDeviceInfo.id);
   }
   return "";
 }

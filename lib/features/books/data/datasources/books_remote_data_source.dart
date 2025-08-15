@@ -37,7 +37,8 @@ class BooksRemoteDataSourceImpl implements BooksRemoteDataSource {
   @override
   Future<List<BookModel>> getBooksByCategory(String category) async {
     try {
-      final response = await _dio.get('/books', queryParameters: {'category': category});
+      final response =
+          await _dio.get('/books', queryParameters: {'category': category});
       final List<dynamic> jsonList = response.data['data'] ?? response.data;
       return jsonList.map((json) => BookModel.fromJson(json)).toList();
     } on DioException catch (e) {
@@ -48,7 +49,8 @@ class BooksRemoteDataSourceImpl implements BooksRemoteDataSource {
   @override
   Future<List<BookModel>> searchBooks(String query) async {
     try {
-      final response = await _dio.get('/books/search', queryParameters: {'q': query});
+      final response =
+          await _dio.get('/books/search', queryParameters: {'q': query});
       final List<dynamic> jsonList = response.data['data'] ?? response.data;
       return jsonList.map((json) => BookModel.fromJson(json)).toList();
     } on DioException catch (e) {
@@ -70,7 +72,8 @@ class BooksRemoteDataSourceImpl implements BooksRemoteDataSource {
   @override
   Future<BookModel> updateBookProgress(String bookId, double progress) async {
     try {
-      final response = await _dio.patch('/books/$bookId/progress', data: {'progress': progress});
+      final response = await _dio
+          .patch('/books/$bookId/progress', data: {'progress': progress});
       final Map<String, dynamic> json = response.data['data'] ?? response.data;
       return BookModel.fromJson(json);
     } on DioException catch (e) {

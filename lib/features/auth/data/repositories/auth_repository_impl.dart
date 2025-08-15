@@ -22,15 +22,17 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   @override
   Future<Either<Failure, LoginEntity>> login(String email, String password) {
     log('📦 AuthRepositoryImpl: Starting login for $email', name: 'AuthRepo');
-    
+
     return safeApiCall(() async {
       log('🔧 AuthRepositoryImpl: Creating login request', name: 'AuthRepo');
       final request = LoginRequestModel(email: email, password: password);
-      
-      log('🌐 AuthRepositoryImpl: Calling remote data source', name: 'AuthRepo');
+
+      log('🌐 AuthRepositoryImpl: Calling remote data source',
+          name: 'AuthRepo');
       final response = await remoteDataSource.login(request);
-      
-      log('✅ AuthRepositoryImpl: Got response, creating LoginEntity', name: 'AuthRepo');
+
+      log('✅ AuthRepositoryImpl: Got response, creating LoginEntity',
+          name: 'AuthRepo');
       return LoginEntity(
         token: response.token,
         isTeacher: response.isTeacher,

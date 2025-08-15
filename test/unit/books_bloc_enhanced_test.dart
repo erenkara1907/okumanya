@@ -12,7 +12,7 @@ import 'package:okumanya/features/books/presentation/bloc/books_state.dart';
 class FakeGetBooks implements GetBooks {
   final Either<Failure, List<Book>> result;
   FakeGetBooks(this.result);
-  
+
   @override
   Future<Either<Failure, List<Book>>> call() async => result;
 }
@@ -20,17 +20,20 @@ class FakeGetBooks implements GetBooks {
 class FakeSearchBooks implements SearchBooks {
   final Either<Failure, List<Book>> result;
   FakeSearchBooks(this.result);
-  
+
   @override
-  Future<Either<Failure, List<Book>>> call(SearchBooksParams params) async => result;
+  Future<Either<Failure, List<Book>>> call(SearchBooksParams params) async =>
+      result;
 }
 
 class FakeGetBooksByCategory implements GetBooksByCategory {
   final Either<Failure, List<Book>> result;
   FakeGetBooksByCategory(this.result);
-  
+
   @override
-  Future<Either<Failure, List<Book>>> call(GetBooksByCategoryParams params) async => result;
+  Future<Either<Failure, List<Book>>> call(
+          GetBooksByCategoryParams params) async =>
+      result;
 }
 
 void main() {
@@ -62,7 +65,7 @@ void main() {
       expect(bloc, isNotNull);
       expect(bloc, isA<BooksBloc>());
       expect(bloc.state, equals(const BooksState.initial()));
-      
+
       bloc.close();
     });
 
@@ -74,7 +77,7 @@ void main() {
       );
 
       expect(bloc.state, equals(const BooksState.initial()));
-      
+
       bloc.close();
     });
 
@@ -82,7 +85,7 @@ void main() {
       test('FakeGetBooks returns expected result', () async {
         final fakeGetBooks = FakeGetBooks(Right(testBooks));
         final result = await fakeGetBooks();
-        
+
         expect(result, isA<Right<Failure, List<Book>>>());
         expect(result.fold((l) => null, (r) => r), equals(testBooks));
       });
@@ -91,23 +94,25 @@ void main() {
         const failure = ServerFailure(message: 'Test error');
         final fakeGetBooks = FakeGetBooks(const Left(failure));
         final result = await fakeGetBooks();
-        
+
         expect(result, isA<Left<Failure, List<Book>>>());
         expect(result.fold((l) => l, (r) => null), equals(failure));
       });
 
       test('FakeSearchBooks works with query parameter', () async {
         final fakeSearchBooks = FakeSearchBooks(Right(testBooks));
-        final result = await fakeSearchBooks(const SearchBooksParams(query: 'test'));
-        
+        final result =
+            await fakeSearchBooks(const SearchBooksParams(query: 'test'));
+
         expect(result, isA<Right<Failure, List<Book>>>());
         expect(result.fold((l) => null, (r) => r), equals(testBooks));
       });
 
       test('FakeGetBooksByCategory works with category parameter', () async {
         final fakeGetBooksByCategory = FakeGetBooksByCategory(Right(testBooks));
-        final result = await fakeGetBooksByCategory(const GetBooksByCategoryParams(category: 'Fiction'));
-        
+        final result = await fakeGetBooksByCategory(
+            const GetBooksByCategoryParams(category: 'Fiction'));
+
         expect(result, isA<Right<Failure, List<Book>>>());
         expect(result.fold((l) => null, (r) => r), equals(testBooks));
       });
@@ -117,14 +122,14 @@ void main() {
       test('handles ServerFailure correctly', () {
         const failure = ServerFailure(message: 'Server error');
         final fakeGetBooks = FakeGetBooks(const Left(failure));
-        
+
         expect(fakeGetBooks.result, isA<Left<Failure, List<Book>>>());
       });
 
       test('handles NetworkFailure correctly', () {
         const failure = NetworkFailure(message: 'Network error');
         final fakeSearchBooks = FakeSearchBooks(const Left(failure));
-        
+
         expect(fakeSearchBooks.result, isA<Left<Failure, List<Book>>>());
       });
     });

@@ -31,7 +31,7 @@ void main() {
   group('LoginBloc', () {
     const tEmail = 'test@example.com';
     const tPassword = 'password123';
-    
+
     final tUserModel = UserModel(
       id: 1,
       name: 'Test User',
@@ -63,7 +63,7 @@ void main() {
             userId: anyNamed('userId'),
             isTeacher: anyNamed('isTeacher'),
           )).thenAnswer((_) async => {});
-          
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
@@ -79,9 +79,9 @@ void main() {
       blocTest<LoginBloc, LoginState>(
         'emits [loading, error] when login fails with network error',
         build: () {
-          when(mockLoginUseCase(any))
-              .thenAnswer((_) async => Left(NetworkFailure(message: 'No internet connection')));
-          
+          when(mockLoginUseCase(any)).thenAnswer((_) async =>
+              Left(NetworkFailure(message: 'No internet connection')));
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
@@ -97,9 +97,9 @@ void main() {
       blocTest<LoginBloc, LoginState>(
         'emits [loading, error] when login fails with auth error',
         build: () {
-          when(mockLoginUseCase(any))
-              .thenAnswer((_) async => Left(AuthFailure(message: 'Invalid credentials')));
-          
+          when(mockLoginUseCase(any)).thenAnswer(
+              (_) async => Left(AuthFailure(message: 'Invalid credentials')));
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
@@ -122,7 +122,7 @@ void main() {
             userId: anyNamed('userId'),
             isTeacher: anyNamed('isTeacher'),
           )).thenThrow(Exception('Storage error'));
-          
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
@@ -130,7 +130,8 @@ void main() {
           LoginState().copyWith(status: LoginStatus.loading),
           LoginState().copyWith(
             status: LoginStatus.error,
-            errorMessage: 'Oturum verileri kaydedilemedi: Exception: Storage error',
+            errorMessage:
+                'Oturum verileri kaydedilemedi: Exception: Storage error',
           ),
         ],
       );
@@ -145,7 +146,7 @@ void main() {
             userId: anyNamed('userId'),
             isTeacher: anyNamed('isTeacher'),
           )).thenAnswer((_) async => {});
-          
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
@@ -168,7 +169,7 @@ void main() {
             userId: anyNamed('userId'),
             isTeacher: anyNamed('isTeacher'),
           )).thenAnswer((_) async => {});
-          
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
@@ -207,9 +208,8 @@ void main() {
       blocTest<LoginBloc, LoginState>(
         'handles unexpected errors gracefully',
         build: () {
-          when(mockLoginUseCase(any))
-              .thenThrow(Exception('Unexpected error'));
-          
+          when(mockLoginUseCase(any)).thenThrow(Exception('Unexpected error'));
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
@@ -225,9 +225,9 @@ void main() {
       blocTest<LoginBloc, LoginState>(
         'handles server errors appropriately',
         build: () {
-          when(mockLoginUseCase(any))
-              .thenAnswer((_) async => Left(ServerFailure(message: 'Server error', statusCode: 500)));
-          
+          when(mockLoginUseCase(any)).thenAnswer((_) async =>
+              Left(ServerFailure(message: 'Server error', statusCode: 500)));
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: tEmail, password: tPassword)),
@@ -243,12 +243,13 @@ void main() {
       blocTest<LoginBloc, LoginState>(
         'handles validation errors appropriately',
         build: () {
-          when(mockLoginUseCase(any))
-              .thenAnswer((_) async => Left(ValidationFailure(message: 'Invalid email format')));
-          
+          when(mockLoginUseCase(any)).thenAnswer((_) async =>
+              Left(ValidationFailure(message: 'Invalid email format')));
+
           return loginBloc;
         },
-        act: (bloc) => bloc.add(Login(email: 'invalid-email', password: tPassword)),
+        act: (bloc) =>
+            bloc.add(Login(email: 'invalid-email', password: tPassword)),
         expect: () => [
           LoginState().copyWith(status: LoginStatus.loading),
           LoginState().copyWith(
@@ -293,7 +294,7 @@ void main() {
             userId: anyNamed('userId'),
             isTeacher: anyNamed('isTeacher'),
           )).thenAnswer((_) async => {});
-          
+
           return loginBloc;
         },
         act: (bloc) {
@@ -325,9 +326,10 @@ void main() {
       blocTest<LoginBloc, LoginState>(
         'handles empty email and password',
         build: () {
-          when(mockLoginUseCase(any))
-              .thenAnswer((_) async => Left(ValidationFailure(message: 'Email and password cannot be empty')));
-          
+          when(mockLoginUseCase(any)).thenAnswer((_) async => Left(
+              ValidationFailure(
+                  message: 'Email and password cannot be empty')));
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(email: '', password: '')),
@@ -350,7 +352,7 @@ void main() {
             userId: anyNamed('userId'),
             isTeacher: anyNamed('isTeacher'),
           )).thenAnswer((_) async => {});
-          
+
           return loginBloc;
         },
         act: (bloc) => bloc.add(Login(

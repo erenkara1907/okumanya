@@ -25,7 +25,8 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin, ProfilePageMixin {
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin, ProfilePageMixin {
   @override
   void initState() {
     super.initState();

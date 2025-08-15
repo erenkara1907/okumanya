@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/app_constants.dart';
 
 /// Advanced loading widget with different states and animations
 class AdvancedLoading extends StatelessWidget {
@@ -21,30 +22,30 @@ class AdvancedLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     final loadingWidget = _buildLoadingWidget(theme);
-    
+
     if (message != null) {
       return _buildWithMessage(loadingWidget, theme);
     }
-    
+
     if (showBackground) {
       return Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
         decoration: BoxDecoration(
           color: colorScheme.surface.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
         ),
         child: loadingWidget,
       );
     }
-    
+
     return loadingWidget;
   }
-  
+
   Widget _buildLoadingWidget(ThemeData theme) {
     final loadingColor = color ?? theme.colorScheme.primary;
-    
+
     switch (type) {
       case LoadingType.circular:
         return SizedBox(
@@ -55,7 +56,7 @@ class AdvancedLoading extends StatelessWidget {
             strokeWidth: 3,
           ),
         );
-      
+
       case LoadingType.linear:
         return SizedBox(
           width: size * 2,
@@ -65,19 +66,19 @@ class AdvancedLoading extends StatelessWidget {
             backgroundColor: loadingColor.withValues(alpha: 0.2),
           ),
         );
-      
+
       case LoadingType.dots:
         return _DotsLoading(
           color: loadingColor,
           size: size / 8,
         );
-      
+
       case LoadingType.pulse:
         return _PulseLoading(
           color: loadingColor,
           size: size,
         );
-      
+
       case LoadingType.wave:
         return _WaveLoading(
           color: loadingColor,
@@ -85,14 +86,14 @@ class AdvancedLoading extends StatelessWidget {
         );
     }
   }
-  
+
   Widget _buildWithMessage(Widget loadingWidget, ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppConstants.largePadding),
       decoration: showBackground
           ? BoxDecoration(
               color: theme.colorScheme.surface.withValues(alpha: 0.95),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppConstants.defaultPadding),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.1),
@@ -106,7 +107,7 @@ class AdvancedLoading extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           loadingWidget,
-          const SizedBox(height: 16),
+          const SizedBox(height: AppConstants.defaultPadding),
           Text(
             message!,
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -153,20 +154,20 @@ class _DotsLoadingState extends State<_DotsLoading>
     _controllers = List.generate(
       3,
       (index) => AnimationController(
-        duration: const Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 600), // Custom animation duration
         vsync: this,
       ),
     );
-    
+
     _animations = _controllers.map((controller) {
       return Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(parent: controller, curve: Curves.easeInOut),
       );
     }).toList();
-    
+
     _startAnimations();
   }
-  
+
   void _startAnimations() {
     for (int i = 0; i < _controllers.length; i++) {
       Future.delayed(Duration(milliseconds: i * 200), () {
@@ -237,14 +238,14 @@ class _PulseLoadingState extends State<_PulseLoading>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000), // Custom animation duration
       vsync: this,
     );
-    
+
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
-    
+
     _controller.repeat(reverse: true);
   }
 
@@ -263,7 +264,8 @@ class _PulseLoadingState extends State<_PulseLoading>
           width: widget.size,
           height: widget.size,
           decoration: BoxDecoration(
-            color: widget.color.withValues(alpha: 0.3 + (_animation.value * 0.7)),
+            color:
+                widget.color.withValues(alpha: 0.3 + (_animation.value * 0.7)),
             shape: BoxShape.circle,
           ),
         );
@@ -301,16 +303,16 @@ class _WaveLoadingState extends State<_WaveLoading>
         vsync: this,
       ),
     );
-    
+
     _animations = _controllers.map((controller) {
       return Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(parent: controller, curve: Curves.easeInOut),
       );
     }).toList();
-    
+
     _startAnimations();
   }
-  
+
   void _startAnimations() {
     for (int i = 0; i < _controllers.length; i++) {
       Future.delayed(Duration(milliseconds: i * 100), () {
@@ -340,7 +342,8 @@ class _WaveLoadingState extends State<_WaveLoading>
             return Container(
               margin: EdgeInsets.symmetric(horizontal: widget.size / 20),
               width: widget.size / 8,
-              height: widget.size / 2 + (_animations[index].value * widget.size / 2),
+              height: widget.size / 2 +
+                  (_animations[index].value * widget.size / 2),
               decoration: BoxDecoration(
                 color: widget.color,
                 borderRadius: BorderRadius.circular(widget.size / 16),

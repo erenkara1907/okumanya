@@ -19,7 +19,8 @@ abstract class BooksRepository {
   Future<Either<Failure, Book>> getBookById(String id);
 
   /// Updates book progress
-  Future<Either<Failure, Book>> updateBookProgress(String bookId, double progress);
+  Future<Either<Failure, Book>> updateBookProgress(
+      String bookId, double progress);
 
   /// Toggles book favorite status
   Future<Either<Failure, Book>> toggleBookFavorite(String bookId);

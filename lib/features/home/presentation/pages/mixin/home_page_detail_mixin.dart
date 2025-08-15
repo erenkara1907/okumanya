@@ -68,11 +68,12 @@ mixin HomePageDetailMixin {
         ),
       );
 
-  Text _infoQuestion(BuildContext context, {required String text}) => Text(text.toUpperCase(),
-      style: context.general.textTheme.bodySmall?.copyWith(
-        color: Colors.white.withAlpha(50),
-        fontWeight: FontWeight.bold,
-      ));
+  Text _infoQuestion(BuildContext context, {required String text}) =>
+      Text(text.toUpperCase(),
+          style: context.general.textTheme.bodySmall?.copyWith(
+            color: Colors.white.withAlpha(50),
+            fontWeight: FontWeight.bold,
+          ));
 
   Text _description(BuildContext context) {
     return Text(

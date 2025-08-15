@@ -12,19 +12,19 @@ abstract class IAuthRepository {
     required String pushToken,
     required String language,
   });
-  
+
   Future<Either<Failure, void>> logout();
-  
+
   Future<Either<Failure, bool>> isUserLoggedIn();
-  
+
   Future<Either<Failure, AuthUser?>> getCurrentUser();
 }
 
 /// Separate interface for profile operations to follow Interface Segregation
 abstract class IProfileRepository {
   Future<Either<Failure, UserProfile>> getProfile();
-  
+
   Future<Either<Failure, UserProfile>> updateProfile(UserProfile profile);
-  
+
   Future<Either<Failure, void>> deleteProfile();
 }

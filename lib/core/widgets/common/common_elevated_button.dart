@@ -50,4 +50,3 @@ class CommonElevatedButton extends StatelessWidget {
     );
   }
 }
-

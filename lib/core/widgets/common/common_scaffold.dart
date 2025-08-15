@@ -31,7 +31,7 @@ class CommonScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget bodyWidget;
-    
+
     if (isFullScreen) {
       bodyWidget = SafeArea(
         child: Container(
@@ -52,7 +52,7 @@ class CommonScaffold extends StatelessWidget {
         ),
       );
     }
-    
+
     // Only wrap with Shimmer if explicitly enabled
     if (enableShimmer) {
       bodyWidget = Shimmer(child: bodyWidget);

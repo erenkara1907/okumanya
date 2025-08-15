@@ -49,7 +49,8 @@ void main() {
       'user': tUserModelJson,
     };
 
-    final tLoginResponseModel = LoginResponseModel.fromJson(tLoginResponseModelJson);
+    final tLoginResponseModel =
+        LoginResponseModel.fromJson(tLoginResponseModelJson);
 
     group('login', () {
       test('should perform POST request on correct endpoint', () async {
@@ -59,10 +60,10 @@ void main() {
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: tLoginResponseModelJson,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: tLoginResponseModelJson,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         await dataSource.login(tLoginRequest);
@@ -75,17 +76,18 @@ void main() {
         ));
       });
 
-      test('should return LoginResponseModel when response code is 200', () async {
+      test('should return LoginResponseModel when response code is 200',
+          () async {
         // arrange
         when(mockDio.post(
           any,
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: tLoginResponseModelJson,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: tLoginResponseModelJson,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         final result = await dataSource.login(tLoginRequest);
@@ -120,7 +122,8 @@ void main() {
         );
       });
 
-      test('should throw NotFoundException when response code is 404', () async {
+      test('should throw NotFoundException when response code is 404',
+          () async {
         // arrange
         when(mockDio.post(
           any,
@@ -172,7 +175,8 @@ void main() {
         );
       });
 
-      test('should throw NetworkException when there is no connection', () async {
+      test('should throw NetworkException when there is no connection',
+          () async {
         // arrange
         when(mockDio.post(
           any,
@@ -214,7 +218,8 @@ void main() {
         );
       });
 
-      test('should throw NetworkException when receive timeout occurs', () async {
+      test('should throw NetworkException when receive timeout occurs',
+          () async {
         // arrange
         when(mockDio.post(
           any,
@@ -235,17 +240,18 @@ void main() {
         );
       });
 
-      test('should throw CacheException when response data is invalid JSON', () async {
+      test('should throw CacheException when response data is invalid JSON',
+          () async {
         // arrange
         when(mockDio.post(
           any,
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: 'invalid json response',
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: 'invalid json response',
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         final call = dataSource.login;
@@ -277,13 +283,14 @@ void main() {
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: tTeacherResponseJson,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: tTeacherResponseJson,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
-        final result = await dataSource.login(LoginRequestModel(email: 'teacher@example.com', password: 'teacherpass'));
+        final result = await dataSource.login(LoginRequestModel(
+            email: 'teacher@example.com', password: 'teacherpass'));
 
         // assert
         expect(result.isTeacher, true);
@@ -291,7 +298,8 @@ void main() {
         expect(result.token, 'teacher_token_456');
       });
 
-      test('should handle response with missing optional user fields', () async {
+      test('should handle response with missing optional user fields',
+          () async {
         // arrange
         final tMinimalUserJson = {
           'id': 1,
@@ -315,10 +323,10 @@ void main() {
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: tMinimalResponseJson,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: tMinimalResponseJson,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         final result = await dataSource.login(tLoginRequest);
@@ -374,10 +382,10 @@ void main() {
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: tMalformedResponse,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: tMalformedResponse,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         final call = dataSource.login;
@@ -396,10 +404,10 @@ void main() {
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: tLoginResponseModelJson,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: tLoginResponseModelJson,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         await dataSource.login(tLoginRequest);
@@ -410,9 +418,8 @@ void main() {
           data: any,
           options: argThat(
             predicate<Options>((options) =>
-              options.headers?['Content-Type'] == 'application/json' &&
-              options.headers?['Accept'] == 'application/json'
-            ),
+                options.headers?['Content-Type'] == 'application/json' &&
+                options.headers?['Accept'] == 'application/json'),
             named: 'options',
           ),
         ));
@@ -422,22 +429,24 @@ void main() {
     group('Edge Cases', () {
       test('should handle very long email addresses', () async {
         // arrange
-        const longEmail = 'very.long.email.address@very.long.domain.name.example.com';
+        const longEmail =
+            'very.long.email.address@very.long.domain.name.example.com';
         when(mockDio.post(
           any,
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: {
-            ...tLoginResponseModelJson,
-            'user': {...tUserModelJson, 'email': longEmail},
-          },
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: {
+                ...tLoginResponseModelJson,
+                'user': {...tUserModelJson, 'email': longEmail},
+              },
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
-        final result = await dataSource.login(LoginRequestModel(email: longEmail, password: tPassword));
+        final result = await dataSource
+            .login(LoginRequestModel(email: longEmail, password: tPassword));
 
         // assert
         expect(result.user.email, longEmail);
@@ -452,19 +461,20 @@ void main() {
         // arrange
         const specialEmail = 'test+special@example.com';
         const specialPassword = 'P@ssw0rd!#\$%^&*()';
-        
+
         when(mockDio.post(
           any,
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: tLoginResponseModelJson,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: tLoginResponseModelJson,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
-        final result = await dataSource.login(LoginRequestModel(email: specialEmail, password: specialPassword));
+        final result = await dataSource.login(
+            LoginRequestModel(email: specialEmail, password: specialPassword));
 
         // assert
         expect(result, isA<LoginResponseModel>());
@@ -479,22 +489,23 @@ void main() {
         // arrange
         const unicodeEmail = 'tëst@éxämplé.com';
         const unicodePassword = 'pässwörd123ñ';
-        
+
         when(mockDio.post(
           any,
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: {
-            ...tLoginResponseModelJson,
-            'user': {...tUserModelJson, 'email': unicodeEmail},
-          },
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: {
+                ...tLoginResponseModelJson,
+                'user': {...tUserModelJson, 'email': unicodeEmail},
+              },
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
-        final result = await dataSource.login(LoginRequestModel(email: unicodeEmail, password: unicodePassword));
+        final result = await dataSource.login(
+            LoginRequestModel(email: unicodeEmail, password: unicodePassword));
 
         // assert
         expect(result.user.email, unicodeEmail);
@@ -507,10 +518,10 @@ void main() {
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: null,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: null,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         final call = dataSource.login;
@@ -539,10 +550,10 @@ void main() {
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: tResponseWithExtraFields,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: tResponseWithExtraFields,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         final result = await dataSource.login(tLoginRequest);
@@ -599,10 +610,10 @@ void main() {
           data: anyNamed('data'),
           options: anyNamed('options'),
         )).thenAnswer((_) async => Response(
-          data: largeResponse,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ));
+              data: largeResponse,
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
 
         // act
         final result = await dataSource.login(tLoginRequest);

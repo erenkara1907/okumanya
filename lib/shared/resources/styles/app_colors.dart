@@ -30,7 +30,8 @@ class AppColors {
     secondaryColor: const Color(0xFF12A4B8),
     primaryTextColor: Colors.white,
     secondaryTextColor: const Color(0xFF7C849A),
-    primaryGradient: const LinearGradient(colors: [Color(0xFFFFFFFF), Color(0xFFFE6C30)]),
+    primaryGradient:
+        const LinearGradient(colors: [Color(0xFFFFFFFF), Color(0xFFFE6C30)]),
     cardColor: const Color(0xFFE0E2E7),
     errorColor: const Color(0xFFFF6260),
     boxShadow: BoxShadow(
@@ -46,7 +47,8 @@ class AppColors {
     secondaryColor: const Color(0xFF12A4B8),
     primaryTextColor: Colors.white,
     secondaryTextColor: const Color(0xFF7C849A),
-    primaryGradient: const LinearGradient(colors: [Color(0xFFFFFFFF), Color(0xFFFE6C30)]),
+    primaryGradient:
+        const LinearGradient(colors: [Color(0xFFFFFFFF), Color(0xFFFE6C30)]),
     cardColor: const Color(0xFFE0E2E7),
     errorColor: const Color(0xFFFF6260),
     boxShadow: BoxShadow(

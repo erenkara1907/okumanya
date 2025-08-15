@@ -113,35 +113,38 @@ mixin ProfilePageMixin {
     );
   }
 
-  Widget _infoAnswer(BuildContext context, {required String text, String? totalBookPages}) => totalBookPages != null
-      ? RichText(
-          text: TextSpan(children: [
-          TextSpan(
-            text: text,
-            style: context.general.textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextSpan(
-            text: ' / $totalBookPages',
-            style: context.general.textTheme.bodySmall?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ]))
-      : Text(
-          text,
-          style: context.general.textTheme.bodyMedium?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        );
+  Widget _infoAnswer(BuildContext context,
+          {required String text, String? totalBookPages}) =>
+      totalBookPages != null
+          ? RichText(
+              text: TextSpan(children: [
+              TextSpan(
+                text: text,
+                style: context.general.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: ' / $totalBookPages',
+                style: context.general.textTheme.bodySmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ]))
+          : Text(
+              text,
+              style: context.general.textTheme.bodyMedium?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            );
 
-  Text _infoQuestion(BuildContext context, {required String text}) => Text(text.toUpperCase(),
-      style: context.general.textTheme.bodySmall?.copyWith(
-        color: Colors.white.withAlpha(50),
-        fontWeight: FontWeight.bold,
-      ));
+  Text _infoQuestion(BuildContext context, {required String text}) =>
+      Text(text.toUpperCase(),
+          style: context.general.textTheme.bodySmall?.copyWith(
+            color: Colors.white.withAlpha(50),
+            fontWeight: FontWeight.bold,
+          ));
 }

@@ -25,7 +25,8 @@ class LoginUseCase implements UseCase<LoginEntity, LoginParams> {
 
   @override
   Future<Either<Failure, LoginEntity>> call(LoginParams params) {
-    log('🎯 LoginUseCase: Executing login for ${params.email}', name: 'LoginUseCase');
+    log('🎯 LoginUseCase: Executing login for ${params.email}',
+        name: 'LoginUseCase');
     return repository.login(params.email, params.password);
   }
 }

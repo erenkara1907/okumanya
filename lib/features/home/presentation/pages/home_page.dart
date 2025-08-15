@@ -10,6 +10,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../../../../core/widgets/common/common_appbar.dart';
 import '../../../../core/widgets/common/common_scaffold.dart';
+import '../../../../core/widgets/shimmer/shimmer_placeholder.dart';
 import '../bloc/home/home_bloc.dart';
 
 @RoutePage()
@@ -80,23 +81,31 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: 14.h),
                     SizedBox(
                       height: 206.h,
-                      child: ListView.builder(
-                        key: const ValueKey('library_books'),
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 14),
-                            child: BookWidget(
-                              key: ValueKey('library_book_$index'),
-                              image: "assets/images/book3.png",
-                              percent: 0.2,
+                      child: state.status.isLoading 
+                          ? ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 5,
+                              itemBuilder: (context, index) {
+                                return const BookCardShimmer();
+                              },
+                            )
+                          : ListView.builder(
+                              key: const ValueKey('library_books'),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: 5,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 14),
+                                  child: BookWidget(
+                                    key: ValueKey('library_book_$index'),
+                                    image: "assets/images/book3.png",
+                                    percent: 0.2,
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
                     ),
                   ],
                 ),

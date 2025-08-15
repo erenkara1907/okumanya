@@ -34,7 +34,7 @@ void main() {
     test('should be instantiable and expose proper API', () {
       // This test ensures the AuthService class is properly structured
       expect(authService, isA<AuthService>());
-      
+
       // Test that methods exist (without calling them)
       expect(authService.toString(), contains('AuthService'));
     });

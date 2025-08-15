@@ -3,34 +3,34 @@ import 'package:flutter/material.dart';
 /// Advanced theme configuration following Material Design 3.0 principles
 class AppTheme {
   static const _fontFamily = 'Roboto';
-  
+
   // Color palette
   static const Color primaryColor = Color(0xFF6366F1);
   static const Color primaryColorDark = Color(0xFF4338CA);
   static const Color primaryColorLight = Color(0xFF8B5CF6);
-  
+
   static const Color secondaryColor = Color(0xFF10B981);
   static const Color secondaryColorDark = Color(0xFF059669);
   static const Color secondaryColorLight = Color(0xFF34D399);
-  
+
   static const Color errorColor = Color(0xFFF87171);
   static const Color warningColor = Color(0xFFFBBF24);
   static const Color successColor = Color(0xFF10B981);
   static const Color infoColor = Color(0xFF3B82F6);
-  
+
   static const Color surfaceColor = Color(0xFFFAFAFA);
   static const Color backgroundColorLight = Color(0xFFFFFFFF);
   static const Color backgroundColorDark = Color(0xFF1F2937);
-  
+
   static const Color textPrimary = Color(0xFF111827);
   static const Color textSecondary = Color(0xFF6B7280);
   static const Color textDisabled = Color(0xFF9CA3AF);
-  
+
   // Dark theme colors
   static const Color surfaceColorDark = Color(0xFF374151);
   static const Color textPrimaryDark = Color(0xFFF9FAFB);
   static const Color textSecondaryDark = Color(0xFFD1D5DB);
-  
+
   /// Light theme configuration
   static ThemeData get lightTheme {
     return ThemeData(
@@ -47,7 +47,7 @@ class AppTheme {
         onError: Colors.white,
       ),
       scaffoldBackgroundColor: backgroundColorLight,
-      
+
       // AppBar theme
       appBarTheme: const AppBarTheme(
         elevation: 0,
@@ -61,7 +61,7 @@ class AppTheme {
           fontFamily: _fontFamily,
         ),
       ),
-      
+
       // Card theme
       cardTheme: CardThemeData(
         elevation: 2,
@@ -70,7 +70,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      
+
       // Elevated button theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -88,7 +88,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Text button theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
@@ -103,7 +103,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Input decoration theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -124,14 +124,15 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: errorColor, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
-      
+
       // Text themes
       textTheme: _buildTextTheme(),
     );
   }
-  
+
   /// Dark theme configuration
   static ThemeData get darkTheme {
     return ThemeData(
@@ -148,7 +149,6 @@ class AppTheme {
         onError: Colors.black,
       ),
       scaffoldBackgroundColor: backgroundColorDark,
-      
       appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: true,
@@ -161,7 +161,6 @@ class AppTheme {
           fontFamily: _fontFamily,
         ),
       ),
-      
       cardTheme: CardThemeData(
         elevation: 4,
         shadowColor: Colors.black.withValues(alpha: 0.3),
@@ -170,7 +169,6 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColorLight,
@@ -187,7 +185,6 @@ class AppTheme {
           ),
         ),
       ),
-      
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: primaryColorLight,
@@ -201,7 +198,6 @@ class AppTheme {
           ),
         ),
       ),
-      
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surfaceColorDark,
@@ -221,18 +217,18 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: errorColor, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
-      
       textTheme: _buildTextTheme(isDark: true),
     );
   }
-  
+
   /// Builds comprehensive text theme
   static TextTheme _buildTextTheme({bool isDark = false}) {
     final Color textColor = isDark ? textPrimaryDark : textPrimary;
     final Color textColorSecondary = isDark ? textSecondaryDark : textSecondary;
-    
+
     return TextTheme(
       // Headlines
       headlineLarge: TextStyle(
@@ -256,7 +252,7 @@ class AppTheme {
         fontFamily: _fontFamily,
         height: 1.3,
       ),
-      
+
       // Titles
       titleLarge: TextStyle(
         fontSize: 18,
@@ -279,7 +275,7 @@ class AppTheme {
         fontFamily: _fontFamily,
         height: 1.4,
       ),
-      
+
       // Body text
       bodyLarge: TextStyle(
         fontSize: 16,
@@ -302,7 +298,7 @@ class AppTheme {
         fontFamily: _fontFamily,
         height: 1.4,
       ),
-      
+
       // Labels
       labelLarge: TextStyle(
         fontSize: 14,

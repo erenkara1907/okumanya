@@ -7,7 +7,8 @@ import 'package:mockito/mockito.dart';
 import 'package:okumanya/core/error/failures.dart';
 import 'package:okumanya/features/books/domain/entities/book.dart';
 import 'package:okumanya/features/books/domain/usecases/get_books.dart';
-import 'package:okumanya/features/books/domain/usecases/search_books.dart' as use_cases;
+import 'package:okumanya/features/books/domain/usecases/search_books.dart'
+    as use_cases;
 import 'package:okumanya/features/books/domain/usecases/get_books_by_category.dart';
 import 'package:okumanya/features/books/presentation/bloc/books_bloc.dart';
 import 'package:okumanya/features/books/presentation/bloc/books_event.dart';

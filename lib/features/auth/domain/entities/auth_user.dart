@@ -16,16 +16,16 @@ class AuthUser with _$AuthUser {
     required bool isEmailVerified,
     @Default(false) bool rememberMe,
   }) = _AuthUser;
-  
+
   const AuthUser._();
-  
+
   /// Business logic method - checks if token is expired
   bool get isTokenExpired {
     final now = DateTime.now();
     final tokenAge = now.difference(loginTime);
     return tokenAge.inHours > 24; // Token expires after 24 hours
   }
-  
+
   /// Business logic method - checks if user needs refresh
   bool get needsRefresh {
     final now = DateTime.now();

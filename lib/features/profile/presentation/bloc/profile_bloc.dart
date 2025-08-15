@@ -13,13 +13,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<LoadStatistics>(_onLoadStatistics);
   }
 
-  Future<void> _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) async {
+  Future<void> _onLoadProfile(
+      LoadProfile event, Emitter<ProfileState> emit) async {
     emit(state.copyWith(status: ProfileStatus.loading));
 
     try {
       // Mock data for now - replace with actual API call
       await Future.delayed(const Duration(milliseconds: 800));
-      
+
       final mockProfile = ProfileModel(
         id: '1',
         name: 'John Doe',
@@ -43,7 +44,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
-  Future<void> _onUpdateProfile(UpdateProfile event, Emitter<ProfileState> emit) async {
+  Future<void> _onUpdateProfile(
+      UpdateProfile event, Emitter<ProfileState> emit) async {
     if (state.profile == null) return;
 
     emit(state.copyWith(status: ProfileStatus.loading));
@@ -72,11 +74,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
-  Future<void> _onLoadStatistics(LoadStatistics event, Emitter<ProfileState> emit) async {
+  Future<void> _onLoadStatistics(
+      LoadStatistics event, Emitter<ProfileState> emit) async {
     try {
       // Mock statistics data
       await Future.delayed(const Duration(milliseconds: 300));
-      
+
       const mockStatistics = ProfileStatistics(
         totalReadingTime: Duration(hours: 325, minutes: 21, seconds: 15),
         booksRead: 20,

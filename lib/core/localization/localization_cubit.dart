@@ -7,7 +7,7 @@ import 'localization_state.dart';
 /// Cubit for managing localization state
 class LocalizationCubit extends Cubit<LocalizationState> {
   LocalizationCubit() : super(const LocalizationState.initial());
-  
+
   /// Available locales in the app
   static const List<Locale> supportedLocales = [
     Locale('tr', 'TR'),
@@ -16,16 +16,16 @@ class LocalizationCubit extends Cubit<LocalizationState> {
     Locale('fr', 'FR'),
     Locale('es', 'ES'),
   ];
-  
+
   /// Initialize with current locale
   void initialize(Locale currentLocale) {
     emit(LocalizationState.loaded(currentLocale: currentLocale));
   }
-  
+
   /// Changes the app locale
   Future<void> changeLocale(BuildContext context, Locale locale) async {
     emit(LocalizationState.changing(newLocale: locale));
-    
+
     try {
       await context.setLocale(locale);
       emit(LocalizationState.loaded(currentLocale: locale));
@@ -36,7 +36,7 @@ class LocalizationCubit extends Cubit<LocalizationState> {
       ));
     }
   }
-  
+
   /// Gets the display name for a locale
   String getLocaleDisplayName(Locale locale) {
     switch (locale.languageCode) {
@@ -54,7 +54,7 @@ class LocalizationCubit extends Cubit<LocalizationState> {
         return locale.languageCode.toUpperCase();
     }
   }
-  
+
   /// Gets the flag emoji for a locale
   String getLocaleFlag(Locale locale) {
     switch (locale.countryCode) {
@@ -72,7 +72,7 @@ class LocalizationCubit extends Cubit<LocalizationState> {
         return '🌐';
     }
   }
-  
+
   /// Checks if a locale is currently selected
   bool isLocaleSelected(Locale locale) {
     return state.currentLocale.languageCode == locale.languageCode;

@@ -43,7 +43,8 @@ void main() {
     test('should return LoginEntity when login is successful', () async {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(mockRemoteDataSource.login(any)).thenAnswer((_) async => tLoginResponse);
+      when(mockRemoteDataSource.login(any))
+          .thenAnswer((_) async => tLoginResponse);
 
       // act
       final result = await repository.login(tEmail, tPassword);

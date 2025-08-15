@@ -24,7 +24,8 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
     ));
   }
 
-  void _onCloseReadingModal(CloseReadingModal event, Emitter<ReadingState> emit) {
+  void _onCloseReadingModal(
+      CloseReadingModal event, Emitter<ReadingState> emit) {
     emit(state.copyWith(
       isModalOpen: false,
       currentPageIndex: 0,

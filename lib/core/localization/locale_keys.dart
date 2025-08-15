@@ -184,7 +184,7 @@ class _Books {
 
   // Book Filters (for English)
   _BookFilters get filters => const _BookFilters();
-  
+
   // Book Categories (for English)
   _BookCategories get categories => const _BookCategories();
 }

@@ -13,7 +13,7 @@ import 'package:okumanya/features/books/domain/usecases/get_books_by_category.da
 class FakeBooksRepository implements BooksRepository {
   final List<Book> books;
   final bool shouldFail;
-  
+
   FakeBooksRepository({this.books = const [], this.shouldFail = false});
 
   @override
@@ -29,15 +29,17 @@ class FakeBooksRepository implements BooksRepository {
     if (shouldFail) {
       return const Left(NetworkFailure(message: 'Network error'));
     }
-    final filtered = books.where((book) => 
-      book.title.toLowerCase().contains(query.toLowerCase()) ||
-      book.author.toLowerCase().contains(query.toLowerCase())
-    ).toList();
+    final filtered = books
+        .where((book) =>
+            book.title.toLowerCase().contains(query.toLowerCase()) ||
+            book.author.toLowerCase().contains(query.toLowerCase()))
+        .toList();
     return Right(filtered);
   }
 
   @override
-  Future<Either<Failure, List<Book>>> getBooksByCategory(String category) async {
+  Future<Either<Failure, List<Book>>> getBooksByCategory(
+      String category) async {
     if (shouldFail) {
       return const Left(ServerFailure(message: 'Category not found'));
     }
@@ -59,7 +61,8 @@ class FakeBooksRepository implements BooksRepository {
   }
 
   @override
-  Future<Either<Failure, Book>> updateBookProgress(String bookId, double progress) async {
+  Future<Either<Failure, Book>> updateBookProgress(
+      String bookId, double progress) async {
     if (shouldFail) {
       return const Left(ServerFailure(message: 'Update failed'));
     }
@@ -131,7 +134,7 @@ class FakeSearchBooks implements SearchBooks {
   FakeSearchBooks(this.repository);
 
   @override
-  Future<Either<Failure, List<Book>>> call(SearchBooksParams params) => 
+  Future<Either<Failure, List<Book>>> call(SearchBooksParams params) =>
       repository.searchBooks(params.query);
 }
 
@@ -140,7 +143,7 @@ class FakeGetBooksByCategory implements GetBooksByCategory {
   FakeGetBooksByCategory(this.repository);
 
   @override
-  Future<Either<Failure, List<Book>>> call(GetBooksByCategoryParams params) => 
+  Future<Either<Failure, List<Book>>> call(GetBooksByCategoryParams params) =>
       repository.getBooksByCategory(params.category);
 }
 
@@ -224,7 +227,8 @@ void main() {
 
       test('FakeGetBooksByCategory works correctly', () async {
         final useCase = FakeGetBooksByCategory(repository);
-        final result = await useCase(const GetBooksByCategoryParams(category: 'Fiction'));
+        final result =
+            await useCase(const GetBooksByCategoryParams(category: 'Fiction'));
 
         expect(result, isA<Right<Failure, List<Book>>>());
       });
@@ -236,7 +240,7 @@ void main() {
 Future<void> setupTestDependencies() async {
   // Reset GetIt instance before each test
   await getIt.reset();
-  
+
   final testBooks = [
     const Book(
       id: '1',
@@ -255,12 +259,13 @@ Future<void> setupTestDependencies() async {
   ];
 
   final repository = FakeBooksRepository(books: testBooks);
-  
+
   // Register fake dependencies
   getIt.registerLazySingleton<BooksRepository>(() => repository);
   getIt.registerLazySingleton<GetBooks>(() => FakeGetBooks(repository));
   getIt.registerLazySingleton<SearchBooks>(() => FakeSearchBooks(repository));
-  getIt.registerLazySingleton<GetBooksByCategory>(() => FakeGetBooksByCategory(repository));
+  getIt.registerLazySingleton<GetBooksByCategory>(
+      () => FakeGetBooksByCategory(repository));
 }
 
 /// Cleans up test dependencies after each test

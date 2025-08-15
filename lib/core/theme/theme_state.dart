@@ -7,10 +7,10 @@ part 'theme_state.freezed.dart';
 class ThemeState with _$ThemeState {
   /// Initial state (follows system theme)
   const factory ThemeState.initial() = Initial;
-  
+
   /// Light theme state
   const factory ThemeState.light() = Light;
-  
+
   /// Dark theme state
   const factory ThemeState.dark() = Dark;
 }

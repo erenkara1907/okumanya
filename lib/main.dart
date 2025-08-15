@@ -37,7 +37,8 @@ Future<void> main() async {
 
   await EasyLocalization.ensureInitialized();
 
-  final appDocumentDirection = await path_provider.getApplicationDocumentsDirectory();
+  final appDocumentDirection =
+      await path_provider.getApplicationDocumentsDirectory();
 
   await hiveInit(appDocumentDirection);
 

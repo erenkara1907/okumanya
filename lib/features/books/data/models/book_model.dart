@@ -24,35 +24,36 @@ class BookModel with _$BookModel {
   const BookModel._();
 
   /// Creates BookModel from JSON
-  factory BookModel.fromJson(Map<String, dynamic> json) => _$BookModelFromJson(json);
+  factory BookModel.fromJson(Map<String, dynamic> json) =>
+      _$BookModelFromJson(json);
 
   /// Converts BookModel to domain entity
   Book toDomain() => Book(
-    id: id,
-    title: title,
-    author: author,
-    category: category,
-    imageUrl: imageUrl,
-    progress: progress,
-    description: description,
-    totalPages: totalPages,
-    currentPage: currentPage,
-    lastReadAt: lastReadAt,
-    isFavorite: isFavorite,
-  );
+        id: id,
+        title: title,
+        author: author,
+        category: category,
+        imageUrl: imageUrl,
+        progress: progress,
+        description: description,
+        totalPages: totalPages,
+        currentPage: currentPage,
+        lastReadAt: lastReadAt,
+        isFavorite: isFavorite,
+      );
 
   /// Creates BookModel from domain entity
   factory BookModel.fromDomain(Book book) => BookModel(
-    id: book.id,
-    title: book.title,
-    author: book.author,
-    category: book.category,
-    imageUrl: book.imageUrl,
-    progress: book.progress,
-    description: book.description,
-    totalPages: book.totalPages,
-    currentPage: book.currentPage,
-    lastReadAt: book.lastReadAt,
-    isFavorite: book.isFavorite,
-  );
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        category: book.category,
+        imageUrl: book.imageUrl,
+        progress: book.progress,
+        description: book.description,
+        totalPages: book.totalPages,
+        currentPage: book.currentPage,
+        lastReadAt: book.lastReadAt,
+        isFavorite: book.isFavorite,
+      );
 }

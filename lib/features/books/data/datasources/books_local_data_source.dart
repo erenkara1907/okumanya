@@ -35,7 +35,7 @@ class BooksLocalDataSourceImpl implements BooksLocalDataSource {
     try {
       final data = await _cacheManager.retrieve<List<dynamic>>(_allBooksKey);
       if (data == null) return null;
-      
+
       return data.map((json) => BookModel.fromJson(json)).toList();
     } catch (e) {
       return null;
@@ -54,7 +54,7 @@ class BooksLocalDataSourceImpl implements BooksLocalDataSource {
       final key = 'books_category_$category';
       final data = await _cacheManager.retrieve<List<dynamic>>(key);
       if (data == null) return null;
-      
+
       return data.map((json) => BookModel.fromJson(json)).toList();
     } catch (e) {
       return null;
@@ -62,7 +62,8 @@ class BooksLocalDataSourceImpl implements BooksLocalDataSource {
   }
 
   @override
-  Future<void> cacheBooksByCategory(String category, List<BookModel> books) async {
+  Future<void> cacheBooksByCategory(
+      String category, List<BookModel> books) async {
     final key = 'books_category_$category';
     final data = books.map((book) => book.toJson()).toList();
     await _cacheManager.store(key, data, expiry: _defaultExpiry);
@@ -74,7 +75,7 @@ class BooksLocalDataSourceImpl implements BooksLocalDataSource {
       final key = 'books_search_${query.toLowerCase().replaceAll(' ', '_')}';
       final data = await _cacheManager.retrieve<List<dynamic>>(key);
       if (data == null) return null;
-      
+
       return data.map((json) => BookModel.fromJson(json)).toList();
     } catch (e) {
       return null;
@@ -85,7 +86,8 @@ class BooksLocalDataSourceImpl implements BooksLocalDataSource {
   Future<void> cacheSearchResults(String query, List<BookModel> books) async {
     final key = 'books_search_${query.toLowerCase().replaceAll(' ', '_')}';
     final data = books.map((book) => book.toJson()).toList();
-    await _cacheManager.store(key, data, expiry: const Duration(hours: 6)); // Shorter expiry for search
+    await _cacheManager.store(key, data,
+        expiry: const Duration(hours: 6)); // Shorter expiry for search
   }
 
   @override
@@ -94,7 +96,7 @@ class BooksLocalDataSourceImpl implements BooksLocalDataSource {
       final key = 'book_$id';
       final data = await _cacheManager.retrieve<Map<String, dynamic>>(key);
       if (data == null) return null;
-      
+
       return BookModel.fromJson(data);
     } catch (e) {
       return null;
@@ -118,7 +120,8 @@ class BooksLocalDataSourceImpl implements BooksLocalDataSource {
 
   @override
   Future<void> cacheCategories(List<String> categories) async {
-    await _cacheManager.store(_categoriesKey, categories, expiry: _defaultExpiry);
+    await _cacheManager.store(_categoriesKey, categories,
+        expiry: _defaultExpiry);
   }
 
   @override

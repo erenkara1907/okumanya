@@ -17,7 +17,7 @@ abstract class DioModule {
         'Accept': 'application/json',
       },
     ));
-    
+
     return dio;
   }
 }

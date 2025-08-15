@@ -33,7 +33,7 @@ class GlobalErrorHandler {
         stackTrace: stack,
       );
     }
-    
+
     // In production, you might want to send this to a crash reporting service
     // like Firebase Crashlytics, Sentry, etc.
   }

@@ -40,13 +40,13 @@ class _AdvancedSearchFieldState extends State<AdvancedSearchField> {
   late TextEditingController _controller;
   late FocusNode _focusNode;
   String _previousValue = '';
-  
+
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? TextEditingController();
     _focusNode = FocusNode();
-    
+
     _controller.addListener(_onTextChanged);
   }
 
@@ -61,10 +61,10 @@ class _AdvancedSearchFieldState extends State<AdvancedSearchField> {
 
   void _onTextChanged() {
     final currentValue = _controller.text;
-    
+
     if (currentValue != _previousValue) {
       _previousValue = currentValue;
-      
+
       // Debounce the search
       Future.delayed(widget.debounceDelay, () {
         if (mounted && _controller.text == currentValue) {
@@ -84,7 +84,7 @@ class _AdvancedSearchFieldState extends State<AdvancedSearchField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return Container(
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? colorScheme.surface,

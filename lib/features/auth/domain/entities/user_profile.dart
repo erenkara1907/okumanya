@@ -20,22 +20,22 @@ class UserProfile with _$UserProfile {
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _UserProfile;
-  
+
   const UserProfile._();
-  
+
   /// Business logic method - gets display name
   String get displayName {
     return fullName.isNotEmpty ? fullName : email.split('@').first;
   }
-  
+
   /// Business logic method - checks if profile is complete
   bool get isProfileComplete {
-    return fullName.isNotEmpty && 
-           email.isNotEmpty && 
-           phoneNumber != null && 
-           avatarUrl != null;
+    return fullName.isNotEmpty &&
+        email.isNotEmpty &&
+        phoneNumber != null &&
+        avatarUrl != null;
   }
-  
+
   /// Business logic method - gets initials for avatar
   String get initials {
     final names = fullName.split(' ');

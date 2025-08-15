@@ -29,7 +29,8 @@ void main() {
         'emits [loading, success] when profile loads successfully',
         build: () => profileBloc,
         act: (bloc) => bloc.add(LoadProfile()),
-        wait: const Duration(milliseconds: 1200), // Wait for both profile and stats
+        wait: const Duration(
+            milliseconds: 1200), // Wait for both profile and stats
         expect: () => [
           const ProfileState().copyWith(status: ProfileStatus.loading),
           ProfileState().copyWith(
@@ -380,7 +381,8 @@ void main() {
       test('ProfileState equality works correctly', () {
         const state1 = ProfileState();
         const state2 = ProfileState();
-        final state3 = const ProfileState().copyWith(status: ProfileStatus.loading);
+        final state3 =
+            const ProfileState().copyWith(status: ProfileStatus.loading);
 
         expect(state1, equals(state2));
         expect(state1, isNot(equals(state3)));
@@ -473,7 +475,8 @@ void main() {
         ),
         act: (bloc) => bloc.add(UpdateProfile(
           name: 'Very Long Name That Exceeds Normal Length Expectations' * 3,
-          email: 'very.long.email.address.that.might.cause.issues@very.long.domain.name.example.com',
+          email:
+              'very.long.email.address.that.might.cause.issues@very.long.domain.name.example.com',
         )),
         wait: const Duration(milliseconds: 600),
         verify: (bloc) {

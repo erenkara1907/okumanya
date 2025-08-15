@@ -53,7 +53,8 @@ class _LoginPageState extends State<LoginPage> {
               );
               // Navigate to home page and clear stack
               context.router.replaceAll([const MainRoute()]);
-            } else if (state.status == LoginStatus.error || state.status == LoginStatus.notfound) {
+            } else if (state.status == LoginStatus.error ||
+                state.status == LoginStatus.notfound) {
               Fluttertoast.showToast(
                 msg: '${"error".tr()} ${state.errorMessage}',
                 gravity: ToastGravity.CENTER,
@@ -68,14 +69,16 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 100.h),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 100.h),
                       child: Image.asset(
                         'assets/images/logo.png',
                       ),
                     ),
                     CommonTextField(
                       textEditingController: emailController,
-                      borderColor: AppColors.defaultAppColor.primaryColor.withValues(alpha: 0.8),
+                      borderColor: AppColors.defaultAppColor.primaryColor
+                          .withValues(alpha: 0.8),
                       hintText: "E-posta",
                       textInputType: TextInputType.emailAddress,
                       prefixIcon: Icon(
@@ -85,7 +88,8 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (email) {
                         if (email == null || email.isEmpty) {
                           return "E-posta adresi gerekli";
-                        } else if (!email.contains('@') || !email.contains('.')) {
+                        } else if (!email.contains('@') ||
+                            !email.contains('.')) {
                           return "Geçerli bir e-posta adresi girin";
                         } else {
                           return null;
@@ -95,7 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 20.h),
                     CommonTextField(
                       textEditingController: passwordController,
-                      borderColor: AppColors.defaultAppColor.primaryColor.withValues(alpha: 0.8),
+                      borderColor: AppColors.defaultAppColor.primaryColor
+                          .withValues(alpha: 0.8),
                       hintText: "password".tr(),
                       prefixIcon: Icon(
                         Icons.lock_outline,
