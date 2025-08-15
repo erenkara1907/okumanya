@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/advanced_card.dart';
 import '../../domain/entities/book.dart';
 
@@ -33,7 +34,7 @@ class AdvancedBookCard extends StatelessWidget {
       width: width,
       height: height,
       child: AdvancedCard(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(AppConstants.smallPadding + 4),
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +47,7 @@ class AdvancedBookCard extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.smallPadding),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.1),
@@ -56,7 +57,7 @@ class AdvancedBookCard extends StatelessWidget {
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.smallPadding),
                     child: Stack(
                       fit: StackFit.expand,
                       children: [

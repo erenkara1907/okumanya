@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kartal/kartal.dart';
+import 'package:okumanya/core/constants/app_constants.dart';
 import 'package:okumanya/features/home/presentation/bloc/reading/reading_bloc.dart';
 import 'package:okumanya/shared/resources/styles/app_colors.dart';
 
@@ -22,7 +23,7 @@ class _ReadingModalBottomSheetState extends State<ReadingModalBottomSheet> with 
     super.initState();
     _pageController = PageController();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: AppConstants.mediumAnimation,
       vsync: this,
     );
     _slideAnimation = Tween<double>(
@@ -87,7 +88,7 @@ class _ReadingModalBottomSheetState extends State<ReadingModalBottomSheet> with 
                                           onPressed: state.currentPageIndex > 0
                                               ? () {
                                                   _pageController.previousPage(
-                                                    duration: const Duration(milliseconds: 300),
+                                                    duration: AppConstants.mediumAnimation,
                                                     curve: Curves.easeInOut,
                                                   );
                                                 }
@@ -109,7 +110,7 @@ class _ReadingModalBottomSheetState extends State<ReadingModalBottomSheet> with 
                                           onPressed: state.currentPageIndex < state.pages.length - 1
                                               ? () {
                                                   _pageController.nextPage(
-                                                    duration: const Duration(milliseconds: 300),
+                                                    duration: AppConstants.mediumAnimation,
                                                     curve: Curves.easeInOut,
                                                   );
                                                 }

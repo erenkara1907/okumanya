@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/app_constants.dart';
 
 /// Advanced search field with debouncing and enhanced UX
 class AdvancedSearchField extends StatefulWidget {
@@ -7,11 +8,11 @@ class AdvancedSearchField extends StatefulWidget {
     this.hintText = 'Search...',
     this.onSearchChanged,
     this.onSearchSubmitted,
-    this.debounceDelay = const Duration(milliseconds: 500),
+    this.debounceDelay = AppConstants.searchDebounce,
     this.prefixIcon,
     this.suffixIcon,
     this.backgroundColor,
-    this.borderRadius = 12,
+    this.borderRadius = AppConstants.defaultRadius,
     this.showBorder = false,
     this.autofocus = false,
     this.enabled = true,
@@ -116,7 +117,7 @@ class _AdvancedSearchFieldState extends State<AdvancedSearchField> {
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
+            horizontal: AppConstants.defaultPadding,
             vertical: 14,
           ),
           prefixIcon: widget.prefixIcon ??

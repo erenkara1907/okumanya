@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import '../constants/app_constants.dart';
 
 /// Advanced card component with enhanced design and functionality
 class AdvancedCard extends StatefulWidget {
   const AdvancedCard({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(16),
-    this.margin = const EdgeInsets.all(8),
-    this.elevation = 2,
-    this.borderRadius = 12,
+    this.padding = const EdgeInsets.all(AppConstants.defaultPadding),
+    this.margin = const EdgeInsets.all(AppConstants.smallPadding),
+    this.elevation = AppConstants.cardElevation,
+    this.borderRadius = AppConstants.defaultRadius,
     this.backgroundColor,
     this.shadowColor,
     this.onTap,
@@ -16,7 +17,7 @@ class AdvancedCard extends StatefulWidget {
     this.gradient,
     this.border,
     this.isAnimated = true,
-    this.animationDuration = const Duration(milliseconds: 200),
+    this.animationDuration = AppConstants.shortAnimation,
     this.hoverElevation = 4,
   });
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../home/presentation/pages/home_page.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/resources/styles/app_colors.dart';
 import '../../../../core/widgets/curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import '../../../../core/widgets/curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
@@ -60,7 +61,7 @@ class _MainPageState extends State<MainPage> {
         color: Color(0xFF12A4B8),
         height: 85.h,
         index: _selectedIndex,
-        animationDuration: Duration(milliseconds: 300),
+        animationDuration: AppConstants.mediumAnimation,
         buttonBackgroundColor: AppColors.defaultAppColor.primaryColor,
         onTap: (index) {
           setState(() {

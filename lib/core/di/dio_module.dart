@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import '../constants/app_constants.dart';
 
 /// Injectable module for Dio HTTP client
 @module
@@ -8,9 +9,9 @@ abstract class DioModule {
   Dio get dio {
     final dio = Dio(BaseOptions(
       baseUrl: 'https://app.okumanya.com.tr/api',
-      connectTimeout: Duration(milliseconds: 30000),
-      receiveTimeout: Duration(milliseconds: 30000),
-      sendTimeout: Duration(milliseconds: 30000),
+      connectTimeout: Duration(milliseconds: AppConstants.connectTimeout),
+      receiveTimeout: Duration(milliseconds: AppConstants.receiveTimeout),
+      sendTimeout: Duration(milliseconds: AppConstants.apiTimeout),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
